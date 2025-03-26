@@ -1,0 +1,42 @@
+.wrapper {
+    width: 100%;
+
+    .menu {
+        width: 98%;
+        overflow-x: auto;
+
+        &::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .menu-item {
+            width: auto;
+            cursor: pointer;
+            padding: 4px 30px;
+            font-weight: 400;
+            font-size: 16px;
+            white-space: nowrap;
+
+            &.active {
+                color: var(--primary-color);
+                background: none;
+            }
+        }
+    }
+
+    .see-more {
+        white-space: nowrap;
+        padding: 6px;
+        cursor: pointer;
+
+        &:hover .see-more-icon {
+            transition: fill ease-in-out 200ms;
+            fill: var(--primary-color);
+        }
+
+        .see-more-btn {
+            rotate: -90deg;
+            cursor: pointer;
+        }
+    }
+}

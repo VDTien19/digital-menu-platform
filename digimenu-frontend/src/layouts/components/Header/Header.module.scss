@@ -1,0 +1,20 @@
+.wrapper {
+    width: 100%;
+    padding: 10px;
+
+    .home-icon {
+        cursor: pointer;
+        width: 3.2rem;
+        height: 3.2rem;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .category {
+        width: 100%;
+    }
+}
