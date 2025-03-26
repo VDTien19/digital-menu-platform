@@ -3,7 +3,7 @@ const routes = {
     home: '/',
 
     // Client routes
-    client_home: '/:slug',
+    client_home: '/:slug',  // query theo tên bàn
     client_menu: '/:slug/menu/:tableName',
     client_message: '/:slug/status/:tableName',
     client_payment: '/:slug/payment/:tableName',
@@ -12,7 +12,7 @@ const routes = {
     // client_invoice_detail: '/:slug/invoice/:invoiceId',
 
     // Admin routes
-    admin_dashboard: '/:slug/admin/dashboard',
+    admin_dashboard: '/:slug/admin',
     admin_category: '/:slug/admin/category',
     admin_introduce: '/:slug/admin/introduce',
     admin_menu: '/:slug/admin/menu',

@@ -7,6 +7,10 @@ import { Home as ServiceHome, Orders, Payment as ServicePayment } from '~/pages/
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 
+// layout
+import HeaderOnly from '~/layouts/HeaderOnly';
+import FooterOnly from '~/layouts/FooterOnly';
+
 const publicRoutes = [
     // Public routes
     { path: config.routes.home, component: Home, layout: null },
@@ -14,11 +18,11 @@ const publicRoutes = [
     { path: config.routes.service_login, component: Login, layout: null },
 
     // Client routes
-    { path: config.routes.client_home, component: ClientHome },
+    { path: config.routes.client_home, component: ClientHome, layout: FooterOnly },
     { path: config.routes.client_menu, component: ClientMenu },
-    { path: config.routes.client_message, component: Message },
-    { path: config.routes.client_payment, component: ClientPayment },
-    { path: config.routes.client_cart, component: Cart },
+    { path: config.routes.client_message, component: Message, layout: FooterOnly },
+    { path: config.routes.client_payment, component: ClientPayment, layout: FooterOnly },
+    { path: config.routes.client_cart, component: Cart, layout: FooterOnly },
     { path: config.routes.client_invoice, component: Invoice },
 ];
 
