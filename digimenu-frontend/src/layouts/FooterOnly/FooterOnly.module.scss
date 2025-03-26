@@ -1,0 +1,26 @@
+/* Mặc định là cho mobile */
+.wrapper {
+    width: 100%;
+    // padding: 10px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    .header {
+        width: 100%;
+    }
+}
+
+/* Khi màn hình lớn hơn 768px (tablet) */
+@media (min-width: 768px) {
+    .wrapper {
+        max-width: 500px;
+    }
+}
+
+/* Khi màn hình lớn hơn 1024px (desktop) */
+@media (min-width: 1024px) {
+    .wrapper {
+        max-width: 900px;
+    }
+}
