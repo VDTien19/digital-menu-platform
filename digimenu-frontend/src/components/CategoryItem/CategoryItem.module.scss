@@ -1,0 +1,53 @@
+.wrapper {
+    width: 100%;
+    background: #ffffff;
+    
+    .title-wrapper {
+        position: relative;
+        height: 34px;
+    }
+
+    .title-bg {
+        width: 100%;
+        position: absolute;
+
+        .line {
+            width: 100%;
+            height: 1px;
+            background: var(--primary-color);
+        }
+    }
+    
+    .title {
+        width: auto;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 12px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 500;
+        flex-shrink: 0;
+        z-index: 2;
+        background: #fff;
+    }
+}
+
+@media (min-width: 1024px) {
+    .wrapper {
+        .title {
+            left: 0;
+            position: relative;
+            padding: 0;
+            margin-left: 10px;
+        }
+
+        .title-wrapper {
+            display: block;
+        }
+
+        .title-bg {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,150 @@
+.wrapper {
+    width: 100%;
+    height: 120px;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+
+    .image {
+        width: 100px;
+        height: 100px;
+        border-radius: 1rem;
+        object-fit: cover;
+        flex-shrink: 0;
+
+        .image-url {
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            object-fit: cover;
+        }
+    }
+
+    .content {
+        height: 100px;
+        // padding-right: 10px;
+
+        .title {
+            cursor: default;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .description {
+            cursor: default;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            font-size: 1.3rem;
+            color: var(--text-color-secondary);
+            // margin-right: 10px;
+            // word-break: break-word; /* Xuống dòng nếu gặp từ dài */
+        }
+        .price {
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            height: 22px;
+            width: 60px;
+            background: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .action {
+
+            .quantity {
+                height: 22px;
+                // gap: 8px;
+
+                .quantity-button {
+                    width: 26px;
+                    height: 100%;
+                    background-color: #f0f0f0;
+                    // border: 1px solid #ccc;
+                    // border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: background-color 0.2s ease;
+                }
+                
+                .quantity-button:hover {
+                    background-color: #ddd;
+                }
+
+                .btn-decrease {
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    border-left: 1px solid #ccc;
+
+                    &.disabled {
+                        cursor: not-allowed;
+                        opacity: 0.5;
+                    }
+
+                    span {
+                        margin-bottom: 11px;
+                    }
+                }
+
+                .btn-increase {
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    border-right: 1px solid #ccc;
+                }
+                
+                .quantity-value {
+                    width: 30px;
+                    height: 100%;
+                    text-align: center;
+                    border: 1px solid #ccc;
+                    // border-radius: 4px;
+                    font-size: 1.2rem;
+                }            
+            }
+            
+           
+            .add-to-cart {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 24px;
+                width: 24px;
+                background: var(--primary-color);
+                border-radius: 50%;
+                color: #fff;
+                font-size: 1.6rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: var(--primary-color-dark);
+                }
+            }
+        }
+    }
+}

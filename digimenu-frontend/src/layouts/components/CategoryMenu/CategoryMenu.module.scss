@@ -16,6 +16,7 @@
             font-weight: 400;
             font-size: 16px;
             white-space: nowrap;
+            transition: all 0.3s ease;
 
             &.active {
                 color: var(--primary-color);
@@ -39,4 +40,12 @@
             cursor: pointer;
         }
     }
+}
+
+.indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px; /* Chiều cao của chỉ báo */
+    background-color: blue; /* Màu sắc của chỉ báo */
+    transition: left 0.3s ease; /* Hiệu ứng chuyển động cho chỉ báo */
 }
