@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 function ClientLayout ({ children }) {
     return (
         <div className={cx('wrapper')}>
-            <header className={cx('header')}>
+            <header className={cx('header', 'fixed')}>
                 <Header />
             </header>
             <div className={cx('content')}>

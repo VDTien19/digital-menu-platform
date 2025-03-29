@@ -3,24 +3,40 @@
     width: 100%;
     // padding: 10px;
     margin: 0 auto;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     border-radius: 4px;
 
     .header {
         width: 100%;
+        max-width: inherit;
+        background: #fff;
+        z-index: 999;
+        top: 0;
+    }
+
+    .content {
+        margin-top: var(--hight-header);
+        // width: 100%;
+        // background: #fff;
+    }
+}
+
+@media (min-width: 480px) {
+    .wrapper {
+        max-width: 400px;
     }
 }
 
 /* Khi màn hình lớn hơn 768px (tablet) */
 @media (min-width: 768px) {
     .wrapper {
-        max-width: 500px;
+        max-width: 650px;
     }
 }
 
 /* Khi màn hình lớn hơn 1024px (desktop) */
 @media (min-width: 1024px) {
     .wrapper {
-        max-width: 900px;
+        max-width: 1200px;
     }
 }
