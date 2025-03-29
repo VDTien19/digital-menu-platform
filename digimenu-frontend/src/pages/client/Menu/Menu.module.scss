@@ -1,0 +1,25 @@
+.wrapper {
+    width: 100%;
+    // padding: 10px;
+    // padding-top: 0;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: 1fr; /* Mặc định 1 cột trên mobile */
+    gap: 16px;
+}
+
+/* Khi lên tablet (>= 768px) -> 2 cột */
+@media (min-width: 768px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Khi lên desktop (>= 1024px) -> 3 cột */
+@media (min-width: 1024px) {
+    .products {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
