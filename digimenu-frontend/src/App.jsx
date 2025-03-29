@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { AdminLayout, ClientLayout, ServiceLayout } from './layouts';
 import ProtectedRoute, { publicRoutes, privateRoutes } from './routes';
+import { SlugProvider } from '~/contexts/SlugContext';
 
 function App() {
     return (
@@ -27,9 +28,11 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
+                                    <SlugProvider>
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    </SlugProvider>
                                 }
                             />
                         );
@@ -52,9 +55,11 @@ function App() {
                                 path={route.path}
                                 element={
                                     <ProtectedRoute>
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
+                                        <SlugProvider>
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        </SlugProvider>
                                     </ProtectedRoute>
                                 }
                             />
