@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import axios from 'axios';
+import httpRequest from '~/utils/httpRequest';
 
 import styles from './CategoryMenu.module.scss';
 import { BarIcon } from '~/components/Icons';
@@ -15,11 +15,15 @@ function CategoryMenu () {
     const { setActiveCategory } = useCategory();
 
     useEffect(() => {
-        axios.get('http://172.20.10.3:8080/categories')
-            .then(res => {
-                setData(res.data);
-            })
-            .catch(err => console.error(err));
+        const fetchData = async () => {
+            try {
+                const response = await httpRequest.get(`categories`);
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        }
+        fetchData();
     }, [])
 
     const handleMenuItemClick = (index, id) => {
