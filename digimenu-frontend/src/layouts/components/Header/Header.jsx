@@ -15,7 +15,8 @@ function Header () {
     const { slug } = useSlug();
     const { tableName } = useParams();
 
-    const toUrl = `/${slug}?tableName=${tableName}`;
+    const toMenuUrl = `/${slug}?tableName=${tableName}`;
+    const toHomeUrl = `/${slug}`;
 
     const location = useLocation();
     const isMenuPage = location.pathname.includes("/menu/");
@@ -23,7 +24,7 @@ function Header () {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('flex', 'items-center')}>
-                <Link to={toUrl}>
+                <Link to={isMenuPage ? toMenuUrl : toHomeUrl}>
                     <div className={cx('home-icon', 'mr-4', 'flex', 'items-center', 'justify-center')}>
                         <HomeIcon />
                     </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import httpRequest from '~/utils/httpRequest';
@@ -12,9 +12,27 @@ function useSlug () {
 function SlugProvider({ children }) {
     const { slug } = useParams();
     const [resData, setResData] = useState(null);
-    const [loadding, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const value = { slug, resData, setResData, loadding, setLoading };
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            try {
+                if(slug) {
+                    const response = await httpRequest.get(`/restaurants?slug=${slug}`);
+                    setResData(response.data.length === 1 ? response.data[0] : null);
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, [slug]);
+
+    const value = { slug, resData, setResData, loading, setLoading };
 
     return (
         <SlugContext.Provider value={value}>

@@ -1,0 +1,68 @@
+.wrapper {
+    padding: 10px;
+
+    .name {
+        margin: 0;
+        font-size: 1.6rem;
+    }
+
+    .hello-img {
+        width: 24px;
+        rotate: -25deg;
+    }
+
+    .interaction {
+
+        .payment-bg {
+            background: linear-gradient(123.68deg, rgb(255, 240, 232) 4.76%, rgb(255, 255, 255) 47.02%, rgb(224, 243, 255) 98.09%);
+            border-color: #e3ecfb80;
+        }
+        .helper-bg {
+            background: linear-gradient(rgb(255, 240, 232) 0%, rgb(224, 255, 253) 100%);
+            border-color: #e3ecfb80;
+        }
+        .search-invoice-bg {
+            background: linear-gradient(rgb(255, 241, 227) 0%, rgb(255, 255, 255) 53.5%, rgb(255, 252, 230) 100%);
+            border-color: #e3ecfb80;
+            margin: 0 auto;
+        }
+        .view-feedback-bg {
+            background: linear-gradient(123.68deg, rgb(255, 240, 232) 4.76%, rgb(255, 255, 255) 47.02%, rgb(224, 243, 255) 98.09%);
+            border-color: #e3ecfb80;
+        }
+    }
+
+    .bg-icon {
+        width: 1.6rem;
+        height: 1.6rem;
+        background-color: #eef1f780;
+    }
+}
+
+// @media (min-width: 746px) {
+//     .wrapper {
+//         .banner {
+//             // height: 300px;
+//             border-radius: 12px;
+
+//             .banner-img {
+//                 border-radius: 12px;
+//                 // object-fit: contain;
+//             }
+//         }
+//     }
+// }
+
+// @media (min-width: 1200px) {
+//     .wrapper {
+//         .banner {
+//             // height: 400px;
+//             border-radius: 12px;
+
+//             .banner-img {
+//                 border-radius: 12px;
+//                 // object-fit: contain;
+//             }
+//         }
+//     }
+// }
