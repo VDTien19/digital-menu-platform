@@ -9,6 +9,10 @@
     .header {
         width: 100%;
     }
+
+    .content {
+        min-height: calc(-160px + 100vh);
+    }
 }
 
 /* Khi màn hình lớn hơn 768px (tablet) */

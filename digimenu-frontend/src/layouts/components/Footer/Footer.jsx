@@ -47,12 +47,12 @@ function Footer () {
                 </div>
             </div> */}
             <div className={cx('system-info')}>
-                <div>Sản phẩm được phát triển và kinh doanh bởi <strong>KTN Group</strong></div>
+                {/* <div>Sản phẩm được phát triển và kinh doanh bởi <strong>KTN Group</strong></div>
                 <strong>Liên hệ để hợp tác</strong>
                 <div><strong>Hotline:</strong> <a href="tel:0123456789">0123 456 789</a></div>
                 <div><strong>Địa chỉ:</strong> 123 Street, City, Country</div>
-                <div><strong>Website:</strong> <Link to="/">www.digimenu.com</Link></div>
-                <div className={cx('copy-right', 'mt-4', 'text-center', 'text-2xl')}>
+                <div><strong>Website:</strong> <Link to="/">www.digimenu.com</Link></div> */}
+                <div className={cx('copy-right', 'text-center', 'text-2xl')}>
                     <p>© 2025 DigiMenu. All rights reserved.</p>
                 </div>
             </div>
