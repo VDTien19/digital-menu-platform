@@ -30,7 +30,11 @@ function Menu () {
     }, [])
 
     if (loading) {
-        return <Loading />;
+        return (
+            <div className={cx('loading', 'fixed', '-inset-0', 'z-999')}>
+                <Loading />
+            </div>
+        );
     }
 
     return (
