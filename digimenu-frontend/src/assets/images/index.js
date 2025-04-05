@@ -10,6 +10,7 @@ import searchInvoice from '~/assets/images/search_invoice.png';
 import rateImg from '~/assets/images/bg-rate.png';
 import lightning_1 from '~/assets/images/lightning_1.png';
 import lightning_2 from '~/assets/images/lightning_2.png';
+import noCart from '~/assets/images/no-cart.png';
 
 const images = {
     noImage,
@@ -24,6 +25,7 @@ const images = {
     rateImg,
     lightning_1,
     lightning_2,
+    noCart,
 };
 
 export default images;
