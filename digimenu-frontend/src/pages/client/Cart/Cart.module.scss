@@ -1,0 +1,24 @@
+.wrapper {
+    width: 100%;
+    position: relative;
+    
+    .header {
+        position: sticky;
+        border-bottom: 1px solid #ccc;
+        background: white;
+        z-index: 1;
+    }
+
+    .icon-back {
+        border: 1px solid #ccc;
+
+        .icon-image {
+            filter: invert(1);
+        }
+    }
+
+    .footer {
+        position: sticky;
+        margin-bottom: 20px;
+    }
+}
