@@ -1,23 +1,35 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
+import { useDispatch } from "react-redux";
+import { toast } from 'react-hot-toast';
 
 import styles from './ProductCard.module.scss';
 import Image from '~/components/Images';
 import { CartIcon } from '~/components/Icons';
+import { addToCart } from '~/store/cartSlice';
 
 const cx = classNames.bind(styles);
 
 function ProductCard({ product }) {
     const [quantity, setQuantity] = useState(1);
-
-    // const handleQuantityChange = (e) => {
-    //     setQuantity(e.target.value);
-    // };
+    const dispatch = useDispatch();
 
     const handleDecrease = () => {
         if (quantity > 1) {
             setQuantity((prev) => prev - 1);
         }
+    };
+
+    const handleAddToCart = () => {
+        dispatch(addToCart({
+            id: product._id,
+            title: product.name,
+            price: product.price,
+            quantity: quantity,
+            image: product.image
+        }));
+        toast(`Thêm x${quantity} ${product.name} vào giỏ hàng.`);
+        setQuantity(1);
     };
 
     return (
@@ -53,7 +65,7 @@ function ProductCard({ product }) {
                             value={quantity}
                             readOnly
                             type="text"
-                            className={cx('quantity-value')}
+                            className={cx('quantity-value', 'cursor-default')}
                         ></input>
                         <button
                             onClick={() => setQuantity((prev) => prev + 1)}
@@ -62,7 +74,7 @@ function ProductCard({ product }) {
                             +
                         </button>
                     </div>
-                    <button className={cx('add-to-cart')}>
+                    <button className={cx('add-to-cart')} onClick={handleAddToCart}>
                         <CartIcon />
                     </button>
                 </div>
