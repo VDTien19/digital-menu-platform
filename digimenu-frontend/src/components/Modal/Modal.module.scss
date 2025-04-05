@@ -8,13 +8,13 @@
 .modal-overlay {
     position: fixed;
     z-index: 1000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    // backdrop-filter: blur(2px);
-    animation: showIn ease-in .4s;
+    animation: showIn ease-in 0.4s;
+
+    &.closing {
+        animation: fadeOut 0.3s ease forwards;
+    }
 }
 
 .modal-content {
@@ -24,10 +24,16 @@
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     max-width: 100%;
+    width: 90%;
+    max-width: 600px;
     max-height: 80vh;
-    border-radius: 10px;
-    background: var(--white);
-    animation: show ease-in-out .3s forwards, showIn ease-in .3s;   /* forwards để giữ trạng thái cuối cùng */
+    border-radius: 8px;
+    background: white;
+    animation: show ease-in-out 0.3s forwards, showIn ease-in 0.3s; /* forwards để giữ trạng thái cuối cùng */
+
+    &.closing {
+        animation: hide 0.3s ease forwards;
+    }
 }
 
 .modal-header {
@@ -50,7 +56,7 @@
 }
 
 .modal-title {
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     font-weight: 400;
     height: var(--header-modal);
     text-align: center;
@@ -68,23 +74,23 @@
 
 .close-icon {
     cursor: pointer;
-    display: block;
-    padding: 6px;
+    padding: 4px;
     transform: rotate(0deg);
-    transition: transform ease-in-out .3s;
+    transition: transform ease-in-out 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
+    fill: #000;
 
     &:hover {
         fill: #7e7e7e;
-        transition: fill ease-out .2s;
+        transition: fill ease-out 0.2s;
     }
 }
 
 .modal-body {
-    padding: 28px;
-    padding-top: 0;
+    // padding: 28px;
+    // padding-top: 0;
     max-height: calc(80vh - var(--header-modal));
     overflow-y: overlay;
     position: relative;
@@ -106,5 +112,11 @@
     }
     to {
         opacity: 1;
+    }
+}
+
+@media (min-width: 500px) {
+    .modal-content {
+        width: 460px;
     }
 }
