@@ -9,7 +9,7 @@
     position: fixed;
     z-index: 1000;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     animation: showIn ease-in 0.4s;
 
     &.closing {
@@ -30,6 +30,7 @@
     border-radius: 8px;
     background: white;
     animation: show ease-in-out 0.3s forwards, showIn ease-in 0.3s; /* forwards để giữ trạng thái cuối cùng */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
     &.closing {
         animation: hide 0.3s ease forwards;

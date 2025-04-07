@@ -16,6 +16,7 @@
 
     .content {
         margin-top: var(--hight-header);
+        min-height: calc(100vh - var(--hight-header) - 120px);
         // width: 100%;
         // background: #fff;
     }

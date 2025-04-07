@@ -19,6 +19,12 @@
         width: 100%;
     }
 
+    .search-value {
+        i {
+            color: var(--primary-color);
+        }
+    }
+
     .cart-wrapper {
         cursor: pointer;
         width: 3.2rem;

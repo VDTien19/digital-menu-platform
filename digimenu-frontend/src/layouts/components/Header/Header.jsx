@@ -8,11 +8,14 @@ import Search from '~/layouts/components/Search';
 import CategoryMenu from '~/layouts/components/CategoryMenu';
 import { HomeIcon, CartIcon } from '~/components/Icons';
 import { useSlug } from '~/contexts/SlugContext';
+import { useSearch } from '~/contexts/SearchContext';
 
 const cx = classNames.bind(styles);
 
 function Header () {
     const { totalQuantity } = useSelector(state => state.cart);
+
+    const { searchValue } = useSearch();
 
     const { slug } = useSlug();
     const { tableName } = useParams();
@@ -50,9 +53,14 @@ function Header () {
                     </Link>
                 )}
             </div>
-            {isMenuPage && (
+            {(isMenuPage && !searchValue) && (
                 <div className={cx('category', 'mt-2')}>
                     <CategoryMenu />
+                </div>
+            )}
+            {(isMenuPage && searchValue) && (
+                <div className={cx('search-value', 'mt-2')}>
+                    <p className={cx('mt-4', 'text-xl')}>Kết quả tìm kiếm cho: <i>{searchValue}</i></p>
                 </div>
             )}
         </div>

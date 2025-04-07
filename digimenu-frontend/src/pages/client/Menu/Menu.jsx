@@ -4,14 +4,24 @@ import classNames from 'classnames/bind';
 import httpRequest from '~/utils/httpRequest';
 import styles from './Menu.module.scss';
 import CategoryList from '~/components/CategoryList';
+import ProductList from '~/components/ProductList';
 import Loading from '~/components/Loading';
+import { useProduct } from '~/contexts/ProductContext';
+import { useSearch } from '~/contexts/SearchContext';
 
 const cx = classNames.bind(styles);
 
-
-function Menu () {
+function Menu() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const { products } = useProduct();
+    const { searchValue, setSearchValue } = useSearch();
+
+    // Clear search value when component unmounts to prevent memory leaks
+    useEffect(() => {
+        setSearchValue('');
+    }, [setSearchValue]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,9 +35,19 @@ function Menu () {
             } finally {
                 setLoading(false);
             }
-        }
+        };
         fetchData();
-    }, [])
+    }, []);
+
+    // Filter products based on search value
+    const filteredProducts = searchValue
+        ? products.filter((product) =>
+              product.name.toLowerCase().includes(searchValue.toLowerCase()),
+          )
+        : [];
+
+    // console.log("Products:", products);
+    // console.log("Filtered Products:", filteredProducts);
 
     if (loading) {
         return (
@@ -39,7 +59,11 @@ function Menu () {
 
     return (
         <div className={cx('wrapper')}>
-            <CategoryList categories={data} />
+            {searchValue && filteredProducts.length > 0 ? (
+                <ProductList products={filteredProducts} />
+            ) : (
+                <CategoryList categories={data} />
+            )}
         </div>
     );
 }

@@ -1,21 +1,32 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import styles from './Search.module.scss';
 import { SearchIcon, CloseCircleIcon } from '~/components/Icons';
+import { useSearch } from '~/contexts/SearchContext';
+import { useDebounce } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
 function Search() {
     const [isSearch, setIsSearch] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
+    const { searchValue, setSearchValue } = useSearch();
 
     const inputRef = useRef(null);
 
     const location = useLocation();
     const isMenuPage = location.pathname.includes("/menu/");
     const isInvoicePage = location.pathname.includes("/invoice");
+
+    const debouncedSearchValue = useDebounce(searchValue, 1000);
+
+    useEffect(() => {
+        if (isInvoicePage) {
+            // thực hiện search logic ở đây bằng debouncedSearchValue
+            console.log("Debounced search for invoice:", debouncedSearchValue);
+        }
+    }, [debouncedSearchValue, isInvoicePage]);
 
     const handleChange = (e) => {
         const searchValue = e.target.value;
@@ -28,6 +39,7 @@ function Search() {
         if(searchValue === '') {
             setIsSearch(false);
         }
+
     };
 
     const handleClear = () => {
