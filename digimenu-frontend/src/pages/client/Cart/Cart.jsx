@@ -40,12 +40,14 @@ function Cart () {
                 <CartList cartItems={cartItems} />
             </div>
 
-            <ConfirmModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)}
-                message="Bạn có chắc chắn muốn xóa tất cả món ăn trong giỏ hàng không?"
-                onConfirm={handleConfirm}
-            />
+            {totalQuantity !== 0 && (
+                <ConfirmModal 
+                    isOpen={isModalOpen} 
+                    onClose={() => setIsModalOpen(false)}
+                    message="Bạn có chắc chắn muốn xóa tất cả món ăn trong giỏ hàng không?"
+                    onConfirm={handleConfirm}
+                />
+            )}
 
             {totalQuantity >= 1 && (
                 <footer className={cx('footer', 'bottom-0', 'w-full', 'h-18', 'flex', 'items-center', 'justify-between', 'px-4', 'gap-8')}>
