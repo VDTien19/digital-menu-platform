@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import httpRequest from '~/utils/httpRequest';
+import * as httpRequest from '~/utils/httpRequest';
 
 import styles from './CategoryMenu.module.scss';
 import { BarIcon } from '~/components/Icons';
@@ -18,7 +18,7 @@ function CategoryMenu () {
         const fetchData = async () => {
             try {
                 const response = await httpRequest.get(`categories`);
-                setData(response.data);
+                setData(response);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }

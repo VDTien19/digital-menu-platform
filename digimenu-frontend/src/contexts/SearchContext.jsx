@@ -4,8 +4,9 @@ const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
     const [searchValue, setSearchValue] = useState('');
+    const [invoices, setInvoices] = useState([]);
 
-    const value = { searchValue, setSearchValue };
+    const value = { searchValue, setSearchValue, invoices, setInvoices };
 
     return (
         <SearchContext.Provider value={value}>

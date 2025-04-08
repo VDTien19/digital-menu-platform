@@ -16,7 +16,7 @@ function ClientLayout ({ children }) {
             <div className={cx('content')}>
                 {children}
             </div>
-            <footer className={cx('footer')}>
+            <footer className={cx('footer', 'mt-6')}>
                 <Footer />
             </footer>
         </div>

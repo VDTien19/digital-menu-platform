@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import httpRequest from '~/utils/httpRequest';
+import * as httpRequest from '~/utils/httpRequest';
 
 const ProductContext = createContext();
 
@@ -12,7 +12,7 @@ export const ProductProvider = ({ children }) => {
         const fetchProducts = async () => {
             try {
                 const response = await httpRequest.get('menu_items');
-                setProducts(response.data);
+                setProducts(response);
                 // console.log("Response data:", response.data);
             } catch (error) {
                 console.error('Failed to fetch products:', error);

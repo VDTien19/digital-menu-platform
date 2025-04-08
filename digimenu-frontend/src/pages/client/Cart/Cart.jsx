@@ -13,6 +13,9 @@ import ConfirmModal from '~/components/ConfirmModal';
 const cx = classNames.bind(styles);
 
 function Cart () {
+    const formatCurrency = (value) =>
+        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
     const dispatch = useDispatch();
     const { totalQuantity, totalPrice, cartItems } = useSelector((state) => state.cart);
     const navigate = useNavigate();
@@ -52,7 +55,7 @@ function Cart () {
             {totalQuantity >= 1 && (
                 <footer className={cx('footer', 'bottom-0', 'w-full', 'h-18', 'flex', 'items-center', 'justify-between', 'px-4', 'gap-8')}>
                     <div className={cx('total-price', 'w-3/7', 'h-full', 'bg-amber-200', 'rounded-xl', 'flex', 'items-center', 'justify-center')}>
-                        Tổng: {totalPrice.toLocaleString()}đ
+                        Tổng: {formatCurrency(totalPrice)}
                     </div>
                     <div className={cx('checkout-btn', 'w-4/7', 'h-full', 'bg-amber-400', 'rounded-xl', 'flex', 'items-center', 'justify-center', 'cursor-pointer')}>
                         Xác nhận và gọi món

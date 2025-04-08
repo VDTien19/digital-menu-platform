@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 
-import httpRequest from '~/utils/httpRequest';
+import * as httpRequest from '~/utils/httpRequest';
 import styles from './Menu.module.scss';
 import CategoryList from '~/components/CategoryList';
 import ProductList from '~/components/ProductList';
@@ -25,13 +25,11 @@ function Menu() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
             try {
                 const response = await httpRequest.get(`categories`);
-                setData(response.data);
+                setData(response);
             } catch (error) {
                 console.error('Error fetching categories:', error);
-                setLoading(false);
             } finally {
                 setLoading(false);
             }

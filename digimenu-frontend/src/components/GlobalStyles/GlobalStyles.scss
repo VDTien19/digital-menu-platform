@@ -5,6 +5,7 @@
     // --primary-color: #f29417;
     --text-color: #161823;
     --text-color-secondary: #6b6b6b;
+    --shadow-color: 0 0 10px rgba(0, 0, 0, 0.1);
 
     // --font-family: 'Poppins', sans-serif;
     --font-family: 'Roboto', sans-serif;
@@ -60,4 +61,14 @@ input,
 a {
     color: var(--text-color);
     text-decoration: none;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield; // Firefox
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
