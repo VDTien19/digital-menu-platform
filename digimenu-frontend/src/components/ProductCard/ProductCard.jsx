@@ -11,6 +11,9 @@ import { addToCart } from '~/store/cartSlice';
 const cx = classNames.bind(styles);
 
 function ProductCard({ product }) {
+    const formatCurrency = (value) =>
+        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
 
@@ -44,7 +47,7 @@ function ProductCard({ product }) {
             <div className={cx('content', 'flex', 'flex-col')}>
                 <p className={cx('title')}>{product.name}</p>
                 <p className={cx('description', 'mb-2')}>{product.description}</p>
-                <div className={cx('price', 'p-4', 'mb-4')}>{product.price}đ</div>
+                <div className={cx('price', 'p-4', 'mb-4')}>{formatCurrency(product.price)}</div>
                 <div className={cx('action', 'flex', 'items-center')}>
                     <div
                         className={cx(

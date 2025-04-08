@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import styles from './CartItem.module.scss';
 import Image from '~/components/Images';
@@ -12,6 +12,9 @@ const cx = classNames.bind(styles);
 
 function CartItem({ item }) {
     const dispatch = useDispatch();
+
+    const formatCurrency = (value) =>
+        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -110,8 +113,8 @@ function CartItem({ item }) {
                     </div>
                 </div>
                 <div className={cx('price', 'text-lg', 'text-gray-500')}>
-                    {item.price}đ x {item.quantity} ={' '}
-                    {item.price * item.quantity}đ
+                    {formatCurrency(item.price)} x {item.quantity} ={' '}
+                    {formatCurrency(item.price * item.quantity)}
                 </div>
             </div>
             <div
