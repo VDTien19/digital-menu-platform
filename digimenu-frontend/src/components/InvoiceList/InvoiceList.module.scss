@@ -1,0 +1,28 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr; /* Mặc định 1 cột trên mobile */
+    gap: 12px;
+    padding: 10px;
+    padding-top: 6px;
+}
+
+/* Khi lên tablet (>= 768px) -> 2 cột */
+@media (min-width: 768px) {
+    .wrapper {
+        grid-template-columns: repeat(2, 1fr);
+
+        .empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+/* Khi lên desktop (>= 1024px) -> 3 cột */
+@media (min-width: 1024px) {
+    .wrapper {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
