@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.0.12",
     "axios": "^1.8.4",
     "classnames": "^2.5.1",
+    "dayjs": "^1.11.13",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
