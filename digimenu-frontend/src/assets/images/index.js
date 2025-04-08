@@ -11,6 +11,11 @@ import rateImg from '~/assets/images/bg-rate.png';
 import lightning_1 from '~/assets/images/lightning_1.png';
 import lightning_2 from '~/assets/images/lightning_2.png';
 import noCart from '~/assets/images/no-cart.png';
+import billImg from '~/assets/images/bill.svg';
+import eyeGif from '~/assets/images/iconEye.gif';
+import searchInvoice_2 from '~/assets/images/search_invoice.png';
+import noResultSearch_1 from '~/assets/images/no_result_search_1.png';
+import noResultSearch_2 from '~/assets/images/no_result_search_2.png';
 
 const images = {
     noImage,
@@ -26,6 +31,11 @@ const images = {
     lightning_1,
     lightning_2,
     noCart,
+    billImg,
+    eyeGif,
+    searchInvoice_2,
+    noResultSearch_1,
+    noResultSearch_2,
 };
 
 export default images;
