@@ -1,0 +1,16 @@
+.title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn-wrapper {
+    background: var(--green-color);
+    color: #ffffff;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #01b075;
+    }
+}
