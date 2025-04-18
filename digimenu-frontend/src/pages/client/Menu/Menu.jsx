@@ -13,9 +13,9 @@ const cx = classNames.bind(styles);
 
 function Menu() {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
-    const { products } = useProduct();
+    const { products, loading } = useProduct();
     const { searchValue, setSearchValue } = useSearch();
 
     // Clear search value when component unmounts to prevent memory leaks
@@ -31,7 +31,7 @@ function Menu() {
             } catch (error) {
                 console.error('Error fetching categories:', error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
         fetchData();

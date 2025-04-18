@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 function Search() {
     const [isSearch, setIsSearch] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [placeholder, setPlaceholder] = useState('Nhập để tìm kiếm');
 
     const { searchValue, setSearchValue, setInvoices } = useSearch();
 
@@ -40,7 +41,6 @@ function Search() {
                     setLoading(true);
                     const response = await httpRequest.get(`invoices?customer_phone=${debouncedSearchValue}`);
                     setInvoices(response);
-                    console.log("Invoices:", response);
                 } catch (e) {
                     console.error(e);
                 } finally {
@@ -89,6 +89,16 @@ function Search() {
         }
     };
 
+    useEffect(() => {
+        if (isMenuPage) {
+            setPlaceholder('Bạn muốn tìm món gì');
+        } else if (isInvoicePage) {
+            setPlaceholder('Nhập để tìm kiếm hóa đơn');
+        } else {
+            setPlaceholder('Nhập để tìm kiếm');
+        }
+    }, [isMenuPage, isInvoicePage])
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('search')}>
@@ -101,9 +111,7 @@ function Search() {
                     onChange={handleChange}
                     className={cx('input')}
                     placeholder={
-                        isMenuPage
-                            ? 'Bạn muốn tìm món gì ?'
-                            : 'Nhập số điện thoại'
+                        placeholder
                     }
                     type={isInvoicePage ? 'number' : 'text'}
                     inputMode={isInvoicePage ? 'numeric' : ''}

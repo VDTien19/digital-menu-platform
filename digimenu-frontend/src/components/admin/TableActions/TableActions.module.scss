@@ -1,0 +1,17 @@
+.eye-icon {
+    fill: rgb(247, 196, 129);
+}
+
+.trash-icon {
+    fill: rgb(255, 63, 63)
+}
+
+.eye-icon,
+.edit-icon,
+.trash-icon {
+    &:hover {
+        // opacity: .7;
+        transition: all .3s ease;
+        transform: scale(1.1);
+    }
+}

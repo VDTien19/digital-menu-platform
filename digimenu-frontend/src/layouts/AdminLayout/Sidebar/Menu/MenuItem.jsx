@@ -13,12 +13,12 @@ function MenuItem({ title, to, icon }) {
             className={(navData) => cx('menu-item', { active: navData.isActive })}
         >
             {/* isActive là một giá trị do React Router cung cấp thông qua callback */}
-                <>
-                    <div className={cx('icon')}>
+                <div className={cx('flex', 'items-center')}>
+                    <div className={cx('icon', 'w-8', 'h-8', 'flex', 'items-center', 'justify-center')}>
                         {icon}
                     </div>
                     <span className={cx('title')}>{title}</span>
-                </>
+                </div>
         </NavLink>
     );
 }

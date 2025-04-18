@@ -1,0 +1,61 @@
+.cus-table-header {
+    height: 40px;
+    border-radius: 8px;
+    background: var(--green-color);
+    margin-bottom: 30px;
+    // padding: 0 8px;
+}
+
+.cus-table-body {
+    padding: 8px 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.cus-table-row {
+    padding: 8px 0 8px 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #f3f2f7;
+    }
+}
+
+.cus-table-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.head-order {
+    text-align: left;
+}
+
+.head-name {
+    margin-right: 20px;
+}
+
+.cell-order {
+    margin-left: 8px;;
+}
+
+.cell-pasword {
+    text-align: center;
+}
+
+.cell-images {
+    display: flex;
+    justify-content: center;
+}
+
+.cell-actions {
+    text-align: center;
+}
+
+.cell-name {
+    margin-left: 20px;
+}
+
+.cell-quantity {
+    text-align: center;
+}

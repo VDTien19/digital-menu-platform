@@ -1,10 +1,18 @@
 .wrapper {
-    width: 300px;
-    padding: 20px 0 26px 8px;
+    max-width: 300px;
+    padding: 20px 30px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
 }
 
 .follow-icon {
     width: 28px;
     height: 28px;
     margin: 2px;
+}
+
+@media (min-width: 1024px) {
+    .wrapper {
+        border-radius: 0;
+    }
 }

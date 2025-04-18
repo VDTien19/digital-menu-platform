@@ -1,13 +1,134 @@
 .wrapper {
-    width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    border: 1px solid #ccc;
-    // padding: 0 20px;
-    // @media (max-width: 768px) {
-    //     padding: 0 10px;
-    // }
+    min-height: 100vh;
 
     .sidebar {
-        margin-right: 6rem;
+        height: 100vh;
+        display: none;
+    }
+
+    .wrapper-sidebar-rsp {
+        animation: show-in 0.4s ease-in;
+
+        &.hide-out {
+            animation: hide-out 0.4s ease-in;
+        }
+
+        .sidebar-rsp {
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+            animation: slide-in 0.4s ease-in;
+            transition: all 0.4s ease-in;
+
+            &.slide-out {
+                animation: slide-out 0.4s ease-in;
+            }
+
+            .close-btn {
+
+                &:hover .close-icon {
+                    fill: #4d4d4d;
+                }
+
+                .close-icon {
+                    fill: #000;
+                    transition: all 0.3s ease-in;
+                    
+                    &:hover {
+                        fill: #4d4d4d;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes show-in {
+    0% {
+        // transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 479px) {
+    .wrapper {
+        width: 100%;
+
+        .sidebar-rsp {
+            width: 70%;
+        }
+    }
+}
+
+@media (min-width: 480px) {
+    .wrapper {
+        width: 100%;
+
+        .sidebar-rsp {
+            width: 50%;
+        }
+    }
+}
+
+/* Khi màn hình lớn hơn 768px (tablet) */
+@media (min-width: 768px) {
+    .wrapper {
+        width: 100%;
+
+        .sidebar-rsp {
+            width: 34%;
+        }
+    }
+}
+
+/* Khi màn hình lớn hơn 1024px (desktop) */
+@media (min-width: 1024px) {
+    .wrapper {
+        max-width: 100%;
+        // padding-right: 2.8rem;
+
+        .sidebar {
+            display: block;
+        }
+
+        .body {
+            padding: 0 20px;
+        }
     }
 }

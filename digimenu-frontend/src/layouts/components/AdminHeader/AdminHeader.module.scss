@@ -1,0 +1,22 @@
+.wrapper {
+
+    .bar-icon {
+        margin-left: 4px;
+        transition: all .3s ease-in-out;
+        &:hover {
+            fill: var(--primary-color);
+        }
+    }
+
+    .setting-icon {
+        margin-right: 8px;
+        transition: all .3s ease-in-out;
+        animation: spinner 3s infinite linear;
+    }
+}
+
+@keyframes spinner {
+    100% {
+        transform: rotate(360deg);
+    }
+}
