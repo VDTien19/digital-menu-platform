@@ -120,7 +120,7 @@
 /* Khi màn hình lớn hơn 1024px (desktop) */
 @media (min-width: 1024px) {
     .wrapper {
-        max-width: 1200px;
+        max-width: 100%;
         // padding-right: 2.8rem;
 
         .sidebar {

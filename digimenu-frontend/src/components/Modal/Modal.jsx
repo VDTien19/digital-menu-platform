@@ -21,7 +21,7 @@ function Modal({ children, isOpen, onClose, title='', partition=false }) {
                 >
                     {title && (
                         <div className={cx('modal-header', {partition: partition})}>
-                            <h1 className={cx('modal-title')}>{title}</h1>
+                            <p className={cx('modal-title')}>{title}</p>
                             <div className={cx('close-btn')} onClick={onClose}>
                                 <CloseIconThin width='2.4rem' height='2.4rem' className={cx('close-icon')} onClick={onClose} />
                                 {/* &times; */}
