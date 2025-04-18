@@ -21,6 +21,12 @@
     }
 }
 
+.cus-table-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .head-order {
     text-align: left;
 }
