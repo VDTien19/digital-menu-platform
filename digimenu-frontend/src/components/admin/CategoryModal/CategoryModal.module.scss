@@ -1,0 +1,34 @@
+.wrapper {
+    padding: 20px;
+
+    .form {
+        // padding: 8px;
+        // border: 1px solid #ccc;
+        // border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+
+        .form-label {
+            margin-right: 10px;
+        }
+
+        .input {
+            padding: 2px;
+            flex: 1;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            
+            &:focus {
+                transition: all 0.3s ease;
+                border-bottom: 1px solid var(--primary-color);
+            }
+        }
+    }
+}
