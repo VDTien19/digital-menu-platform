@@ -1,3 +1,7 @@
+.cus-table {
+    --order-width: 60px;
+}
+
 .cus-table-header {
     height: 40px;
     border-radius: 8px;
@@ -29,6 +33,7 @@
 
 .head-order {
     text-align: left;
+    max-width: var(--order-width);
 }
 
 .head-name {
@@ -36,7 +41,8 @@
 }
 
 .cell-order {
-    margin-left: 8px;;
+    margin-left: 8px;
+    max-width: var(--order-width);
 }
 
 .cell-pasword {
@@ -58,4 +64,19 @@
 
 .cell-quantity {
     text-align: center;
+}
+
+.cell-price {
+    text-align: center;
+}
+
+.cell-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
