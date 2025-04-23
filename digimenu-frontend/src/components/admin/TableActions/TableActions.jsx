@@ -7,13 +7,15 @@ import { EyeIcon, TrashIcon, EditIcon } from '~/components/Icons';
 
 const cx = classNames.bind(styles);
 
-function TableActions({ data, onView, onEdit, onDelete }) {
+function TableActions({ data, onView, onEdit, onDelete, isView=true }) {
     return (
         <div className={cx('flex', 'justify-center')}>
             {/* <Tippy content='Xem'> */}
-                <button onClick={() => onView?.(data)}>
-                    <EyeIcon width='2.2rem' height='2.2rem' className={cx('mx-3', 'eye-icon', 'cursor-pointer')} />
-                </button>
+                {isView && (
+                    <button onClick={() => onView?.(data)}>
+                        <EyeIcon width='2.2rem' height='2.2rem' className={cx('mx-3', 'eye-icon', 'cursor-pointer')} />
+                    </button>
+                )}
             {/* </Tippy> */}
             {/* <Tippy content='Sửa'> */}
                 <button onClick={() => onEdit?.(data)}>
