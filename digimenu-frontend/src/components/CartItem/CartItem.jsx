@@ -7,14 +7,12 @@ import Image from '~/components/Images';
 import { CloseIconThin } from '~/components/Icons';
 import { removeFromCart, increaseOne, decreaseOne } from '~/store/cartSlice';
 import ConfirmModal from '~/components/ConfirmModal';
+import { formatCurrency } from '~/utils/formatCurrency';
 
 const cx = classNames.bind(styles);
 
 function CartItem({ item }) {
     const dispatch = useDispatch();
-
-    const formatCurrency = (value) =>
-        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 

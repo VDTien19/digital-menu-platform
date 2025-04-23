@@ -7,14 +7,12 @@ import images from '~/assets/images';
 import { EyeIcon } from '~/components/Icons';
 import TimeAgo from '~/components/TimeAgo';
 import InvoiceModal from '~/components/InvoiceModal';
+import { formatCurrency } from '~/utils/formatCurrency';
 
 const cx = classNames.bind(styles);
 
 function InvoiceItem ({ item }) {
     const [showModal, setShowModal] = useState(false);
-
-    const formatCurrency = (value) =>
-        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
     // const localTime = new Date(item.issued_at).toLocaleString('vi-VN', {
     //     timeZone: 'Asia/Ho_Chi_Minh',

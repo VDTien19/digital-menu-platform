@@ -7,12 +7,11 @@ import styles from './ProductCard.module.scss';
 import Image from '~/components/Images';
 import { CartIcon } from '~/components/Icons';
 import { addToCart } from '~/store/cartSlice';
+import { formatCurrency } from '~/utils/formatCurrency';
 
 const cx = classNames.bind(styles);
 
 function ProductCard({ product }) {
-    const formatCurrency = (value) =>
-        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
