@@ -4,7 +4,7 @@ import * as httpRequest from '~/utils/httpRequest';
 export const fetchCategories = createAsyncThunk(
     'category/featchCategories',
     async () => {
-        const res = await httpRequest.get('/menu_categories');
+        const res = await httpRequest.get('menu_categories');
         return res;
     }
 );
@@ -12,7 +12,7 @@ export const fetchCategories = createAsyncThunk(
 export const addCategory = createAsyncThunk(
     'category/addCategory',
     async (newCategory) => {
-        const res = await httpRequest.post('/menu_categories', newCategory);
+        const res = await httpRequest.post('menu_categories', newCategory);
         return res;
     }
 );
@@ -20,7 +20,7 @@ export const addCategory = createAsyncThunk(
 export const updateCategory = createAsyncThunk(
     'category/updateCategory',
     async ({ id, data }) => {
-        const res = await httpRequest.patch(`/menu_categories/${id}`, data);
+        const res = await httpRequest.patch(`menu_categories/${id}`, data);
         return res;
     }
 );
@@ -28,7 +28,7 @@ export const updateCategory = createAsyncThunk(
 export const deleteCategory = createAsyncThunk(
     'category/deleteCategory',
     async (id) => {
-        httpRequest.deleted(`/menu_categories/${id}`);
+        httpRequest.deleted(`menu_categories/${id}`);
         return id;
     }
 );
