@@ -17,6 +17,7 @@ import searchInvoice_2 from '~/assets/images/search_invoice.png';
 import noResultSearch_1 from '~/assets/images/no_result_search_1.png';
 import noResultSearch_2 from '~/assets/images/no_result_search_2.png';
 import uploadImage from '~/assets/images/upload-image.webp';
+import searchNotFound from '~/assets/images/search_not_found.svg';
 
 const images = {
     noImage,
@@ -37,7 +38,8 @@ const images = {
     searchInvoice_2,
     noResultSearch_1,
     noResultSearch_2,
-    uploadImage
+    uploadImage,
+    searchNotFound
 };
 
 export default images;
