@@ -18,7 +18,7 @@ function AdminSearch() {
     const {
         searchValue, setSearchValue,
         loading, setLoading,
-        setCategories, setDishes, setTables, setStaff, setInvoices
+        setCategories, setDishes, setTables, setStaff, setInvoices, setHasSearched
     } = useSearch();
 
     useEffect(() => {
@@ -56,6 +56,7 @@ function AdminSearch() {
             await searchByPath(location.pathname, searchValue, {
                 setCategories, setDishes, setTables, setStaff, setInvoices
             });
+            setHasSearched(true);
         } catch (err) {
             console.error('Search error:', err);
         } finally {
