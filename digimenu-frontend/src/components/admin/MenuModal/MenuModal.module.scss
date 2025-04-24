@@ -1,0 +1,64 @@
+.wrapper {
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 6.8rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }    
+    
+    .name-input {
+        transition: all .3s ease;
+        padding: 4px;
+        margin-top: 8px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .price-input {
+        padding: 4px 16px 4px 8px;
+        font-size: 1.4rem;
+        transition: all .3s ease;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .name-input,
+    .price-input {
+        &:focus {
+            border-bottom: 1px solid var(--primary-color);
+            transition: all .3s ease;
+        }
+    }
+
+    .input-desc {
+        padding: 8px;
+        font-size: 1.3rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .select {
+        // height: 3rem;
+
+        &:focus {
+            outline: none;
+            border: none;
+        }
+    }
+
+    .image {
+        box-shadow: var(--shadow-color);
+    }
+
+    .image-overlay {
+        background: rgba(220, 213, 213, 0.4);
+        transition: all .5s ease;
+    }
+}

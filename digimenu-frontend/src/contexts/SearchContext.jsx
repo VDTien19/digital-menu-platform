@@ -6,6 +6,7 @@ export const SearchProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [invoices, setInvoices] = useState([]);
+    const [hasSearched, setHasSearched] = useState(false);
 
     // Admin
     const [categories, setCategories] = useState([]);
@@ -21,6 +22,7 @@ export const SearchProvider = ({ children }) => {
         dishes, setDishes,
         tables, setTables,
         staff, setStaff,
+        hasSearched, setHasSearched,
     };
 
     return (

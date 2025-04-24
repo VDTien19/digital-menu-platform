@@ -9,12 +9,11 @@ import images from '~/assets/images'
 import Image from '~/components/Images';
 import { TrashIcon } from '~/components/Icons';
 import ConfirmModal from '~/components/ConfirmModal';
+import { formatCurrency } from '~/utils/formatCurrency';
 
 const cx = classNames.bind(styles);
 
 function Cart () {
-    const formatCurrency = (value) =>
-        value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
     const dispatch = useDispatch();
     const { totalQuantity, totalPrice, cartItems } = useSelector((state) => state.cart);

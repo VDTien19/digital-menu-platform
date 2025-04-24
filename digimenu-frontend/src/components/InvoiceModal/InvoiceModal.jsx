@@ -1,26 +1,17 @@
 import { } from 'react';
 import classNames from 'classnames/bind';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 
 import styles from './InvoiceModal.module.scss';
 import Modal from '~/components/Modal';
+import { formatCurrency } from '~/utils/formatCurrency';
+import { formatDateTime } from '~/utils/formatDateTime';
 
 const cx = classNames.bind(styles);
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 function InvoiceModal({ isOpen, onClose, item }) {
   if (!isOpen || !item) return null;
 
-  const formattedDate = dayjs(item.issued_at)
-    .tz('Asia/Ho_Chi_Minh')
-    .format('DD/MM/YYYY HH:mm');
-
-  const formatCurrency = (value) =>
-    value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  const formattedDate = formatDateTime(item.issued_at);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title='Chi tiết hoá đơn' partition>

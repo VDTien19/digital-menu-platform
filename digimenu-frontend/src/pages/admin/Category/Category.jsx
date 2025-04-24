@@ -20,7 +20,7 @@ function Category() {
     const dispatch = useDispatch();
     
     const { slug } = useSlug();
-    const { categories } = useSearch();
+    const { categories, hasSearched, searchValue, setHasSearched } = useSearch();
     
     const { list } = useSelector((state) => state.category);
 
@@ -53,9 +53,10 @@ function Category() {
             render: (_, row) => (
                 <TableActions
                     data={row}
-                    onView={() =>
-                        navigate(`/${slug}/admin/menu?name=${row?.name}`)
-                    }
+                    onView={() => {
+                        navigate(`/${slug}/admin/menu?catid=${row?._id}`)
+                        // setSelectedItem(row);
+                    }}
                     onEdit={() => {
                         setShowModalCategory(true);
                         setSelectedItem(row);
@@ -119,6 +120,12 @@ function Category() {
         }
     }
 
+    useEffect(() => {
+        if (searchValue.trim() === '') {
+            setHasSearched(false);
+        }
+    }, [searchValue, setHasSearched]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('mb-8')}>
@@ -131,8 +138,14 @@ function Category() {
                     }}
                 />
             </div>
-            {categories.length ? (
-                <DataTable columns={cateColumns} data={categoriesFilter} />
+            {hasSearched ? (
+                categories.length ? (
+                    <DataTable columns={cateColumns} data={categoriesFilter} />
+                ) : (
+                    <div className="text-center text-gray-500 py-4">
+                        Không tìm thấy kết quả cho từ khoá '<strong>{searchValue}</strong>'
+                    </div>
+                )
             ) : (
                 <DataTable columns={cateColumns} data={cateDataFilter} />
             )}
