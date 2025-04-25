@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import styles from './AdminHeader.module.scss';
 import { BarIcon, SettingIcon } from '~/components/Icons';
 import AdminSearch from '../AdminSearch';
+import { Link } from 'react-router-dom';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +16,7 @@ function AdminHeader ({ onToggleSidebar }) {
     // const isMenu = location.pathname.includes('/admin/menu');
     // const isTable = location.pathname.includes('/admin/table');
     // const isStaff = location.pathname.includes('/admin/staff');
+    const isSetting = location.pathname.includes('/admin/settings');
 
     return (
         <div className={cx('wrapper', 'w-full', 'h-24', 'bg-transparent', 'flex', 'items-center', 'justify-between')}>
@@ -25,11 +28,11 @@ function AdminHeader ({ onToggleSidebar }) {
                     <AdminSearch />
                 </div>
             )} */}
-            <div className={cx('search', 'flex-1', 'mx-8', 'lg:ml-0')}>
+            <div className={cx('search', 'flex-1', 'mx-8', 'lg:ml-0', { "hidden-f": isSetting })}>
                 <AdminSearch />
             </div>
             <button className={cx('setting-icon', 'cursor-pointer', 'lg:hidden')} >
-                <SettingIcon />
+                <Link to={config.routes.admin_settings}><SettingIcon /></Link>
             </button>
         </div>
     );

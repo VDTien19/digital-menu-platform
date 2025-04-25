@@ -5,3 +5,4 @@ export { default as Introduce } from './Introduce';
 export { default as Menu } from './Menu';
 export { default as Staff } from './Staff';
 export { default as Table } from './Table';
+export { default as Setting } from './Setting';
