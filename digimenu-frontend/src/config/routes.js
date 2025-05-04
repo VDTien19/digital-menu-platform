@@ -19,6 +19,7 @@ const routes = {
     admin_staff: '/:slug/admin/staff',
     admin_table: '/:slug/admin/table',
     admin_login: '/:slug/admin/login',
+    admin_settings: '/:slug/admin/settings',
 
     // Service routes
     service_home: '/:slug/service',

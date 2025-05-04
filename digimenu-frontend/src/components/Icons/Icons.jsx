@@ -327,6 +327,112 @@ export const ChangeCameraIcon = ({
     </svg>
 );
 
+export const DownloadIcon = ({
+    width = '2.2rem',
+    height = '2.2rem',
+    className,
+}) => (
+    <svg
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+    >
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        ></g>
+        <g id="SVGRepo_iconCarrier">
+            {' '}
+            <path
+                stroke="#000000"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v8.5m0 0l3-3m-3 3l-3-3M5 15v2a2 2 0 002 2h10a2 2 0 002-2v-2"
+            ></path>{' '}
+        </g>
+    </svg>
+);
+
+export const ChangeIcon = ({
+    width = '1.6rem',
+    height = '1.6rem',
+    className,
+}) => (
+    <svg
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 1024 1024"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M504.7 138.1c-91.4 0-175.4 31.4-241.9 83.9l51.6 63.6c52.4-41.1 118.5-65.7 190.3-65.7 170.5 0 308.7 138.2 308.7 308.7 0 21.9-2.3 43.3-6.7 64l79.5 20.1c5.9-27.1 9.1-55.2 9.1-84 0-215.7-174.9-390.6-390.6-390.6zM702.4 765.8c-53.6 44.7-122.5 71.6-197.7 71.6-170.5 0-308.7-138.2-308.7-308.7 0-36.4 6.3-71.3 17.9-103.7l-79.7-20.1c-13 38.9-20.1 80.6-20.1 123.9 0 215.7 174.9 390.6 390.6 390.6 94.8 0 181.7-33.8 249.3-89.9l-51.6-63.7z"
+            fill="#242424"
+        />
+        <path
+            d="M173.5 416.4m-40.9 0a40.9 40.9 0 1 0 81.8 0 40.9 40.9 0 1 0-81.8 0Z"
+            fill="#242424"
+        />
+        <path
+            d="M286.5 256.4m-40.9 0a40.9 40.9 0 1 0 81.8 0 40.9 40.9 0 1 0-81.8 0Z"
+            fill="#242424"
+        />
+        <path
+            d="M727.5 799.4m-40.9 0a40.9 40.9 0 1 0 81.8 0 40.9 40.9 0 1 0-81.8 0Z"
+            fill="#242424"
+        />
+        <path
+            d="M845.8 605.8m-40.9 0a40.9 40.9 0 1 0 81.8 0 40.9 40.9 0 1 0-81.8 0Z"
+            fill="#242424"
+        />
+        <path
+            d="M33.5 528.4c-14.1-17.7-11.2-43.5 6.5-57.6l108-86.1c17.7-14.1 43.5-11.2 57.6 6.5 14.1 17.7 11.2 43.5-6.5 57.6L91 534.9c-17.7 14.1-43.4 11.2-57.5-6.5z"
+            fill="#242424"
+        />
+        <path
+            d="M285.2 556.4c-17.7 14.1-43.5 11.2-57.6-6.5l-86.1-108c-14.1-17.7-11.2-43.5 6.5-57.6 17.7-14.1 43.5-11.2 57.6 6.5l86.1 108c14.1 17.7 11.2 43.5-6.5 57.6zM977.7 483.6c15.4 16.5 14.5 42.5-2 57.9l-101 94.2c-16.5 15.4-42.5 14.5-57.9-2-15.4-16.5-14.5-42.5 2-57.9l101-94.2c16.6-15.4 42.5-14.5 57.9 2z"
+            fill="#242424"
+        />
+        <path
+            d="M723.2 474.1c16.5-15.4 42.5-14.5 57.9 2l94.2 101c15.4 16.5 14.5 42.5-2 57.9-16.5 15.4-42.5 14.5-57.9-2l-94.2-101c-15.5-16.6-14.6-42.5 2-57.9z"
+            fill="#242424"
+        />
+    </svg>
+);
+
+export const NavigationIcon = ({
+    width = '1.6rem',
+    height = '1.6rem',
+    fill="#000000",
+    className,
+}) => (
+    <svg
+        width={width}
+        height={height}
+        className={className}
+        fill={fill}
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        ></g>
+        <g id="SVGRepo_iconCarrier">
+            <path d="M2.002 9.63c-.023.411.207.794.581.966l7.504 3.442 3.442 7.503c.164.356.52.583.909.583l.057-.002a1 1 0 0 0 .894-.686l5.595-17.032c.117-.358.023-.753-.243-1.02s-.66-.358-1.02-.243L2.688 8.736a1 1 0 0 0-.686.894zm16.464-3.971-4.182 12.73-2.534-5.522a.998.998 0 0 0-.492-.492L5.734 9.841l12.732-4.182z"></path>
+        </g>
+    </svg>
+);
+
 // export const TrashIcon = ({
 //     width = '3rem',
 //     height = '3rem',

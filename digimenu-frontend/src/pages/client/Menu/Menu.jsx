@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
+import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import * as httpRequest from '~/utils/httpRequest';
 import styles from './Menu.module.scss';
@@ -8,15 +10,35 @@ import ProductList from '~/components/ProductList';
 import Loading from '~/components/Loading';
 import { useProduct } from '~/contexts/ProductContext';
 import { useSearch } from '~/contexts/SearchContext';
+import { fetchTable } from '~/store/tableSlice';
 
 const cx = classNames.bind(styles);
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 function Menu() {
     const [data, setData] = useState([]);
+    const [isValidTable, setIsValidTable] = useState(false);
     // const [loading, setLoading] = useState(false);
 
     const { products, loading } = useProduct();
     const { searchValue, setSearchValue } = useSearch();
+
+    const dispatch = useDispatch();
+    const { listTables } = useSelector((state) => state.table);
+    useEffect(() => {
+        dispatch(fetchTable());
+    }, [dispatch]);
+
+    const query = useQuery();
+    const encode = query.get('encode');
+
+    useEffect(() => {
+        const isValidTable = encode && listTables?.some((item) => item.encode === encode);
+        setIsValidTable(isValidTable);
+    }, [listTables, encode]);
 
     // Clear search value when component unmounts to prevent memory leaks
     useEffect(() => {
@@ -48,6 +70,14 @@ function Menu() {
     // console.log("Filtered Products:", filteredProducts);
 
     if (loading) {
+        return (
+            <div className={cx('loading', 'fixed', '-inset-0', 'z-999')}>
+                <Loading />
+            </div>
+        );
+    }
+
+    if(!isValidTable) {
         return (
             <div className={cx('loading', 'fixed', '-inset-0', 'z-999')}>
                 <Loading />
