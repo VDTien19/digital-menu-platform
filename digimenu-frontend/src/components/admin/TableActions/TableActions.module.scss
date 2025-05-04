@@ -8,10 +8,24 @@
 
 .eye-icon,
 .edit-icon,
-.trash-icon {
-    &:hover {
-        // opacity: .7;
-        transition: all .3s ease;
-        transform: scale(1.1);
-    }
+.trash-icon,
+.download-icon {
+    transition: all 0.3s ease;
+    margin: 0 12px;
+}
+
+.icon-group:hover .eye-icon,
+.icon-group:hover .edit-icon,
+.icon-group:hover .trash-icon,
+.icon-group:hover .download-icon {
+    transform: scale(0.9);
+    opacity: 0.5;
+}
+
+.eye-icon:hover,
+.edit-icon:hover,
+.trash-icon:hover,
+.download-icon:hover {
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
 }
