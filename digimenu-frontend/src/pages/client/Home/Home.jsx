@@ -1,12 +1,14 @@
-import {} from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './Home.module.scss';
 import { useSlug } from '~/contexts/SlugContext';
 import Image from '~/components/Images';
 import images from '~/assets/images';
 import Loading from '~/components/Loading';
+import { fetchTable } from '~/store/tableSlice';
 
 const cx = classNames.bind(styles);
 
@@ -15,15 +17,60 @@ function useQuery() {
 }
 
 function Home() {
+    const [isValidTable, setIsValidTable] = useState(false);
+    const dispatch = useDispatch();
+
     const { slug, resData, loading } = useSlug();
+
+    const { listTables } = useSelector((state) => state.table);
+
+    useEffect(() => {
+        dispatch(fetchTable());
+    }, [dispatch]);
 
     const query = useQuery();
     const tableName = query.get('tableName');
-    const toMenuUrl = `/${slug}/menu/${tableName}`;
+    const encode = query.get('encode');
+    const toMenuUrl = `/${slug}/menu/${tableName}?encode=${encode}`;
     const toInvoiceUrl = `/${slug}/invoice`;
 
+    useEffect(() => {
+        // console.log('listTables:', listTables);
+        // console.log('tableName:', tableName);
+        // console.log('encode:', encode);
+    
+        const isValidTable = tableName && encode && listTables?.some((item) => {
+            // console.log(
+            //     'Check item:',
+            //     item.name, 
+            //     item.encode, 
+            //     '==', 
+            //     tableName, 
+            //     encode,
+            //     '-- Match:',
+            //     String(item.name) === String(tableName) && item.encode === encode
+            // );
+            return String(item.name) === String(tableName) && item.encode === encode;
+        });
+    
+        // console.log('isValidTable:', isValidTable);
+        setIsValidTable(isValidTable);
+    }, [listTables, tableName, encode]);
+    
+    
     if (loading) {
         return <Loading />;
+    }
+
+    if (!resData || (tableName && !isValidTable)) {
+        return (
+            <div className={cx('wrapper')}>
+                <div className="text-center py-10">
+                    <p className="text-red-600 text-xl font-semibold">Bàn không hợp lệ hoặc không tồn tại.</p>
+                    <p className="text-gray-500 mt-2">Vui lòng kiểm tra lại mã QR hoặc liên hệ nhân viên hỗ trợ.</p>
+                </div>
+            </div>
+        );
     }
 
     return (
