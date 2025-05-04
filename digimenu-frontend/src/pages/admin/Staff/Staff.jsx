@@ -26,6 +26,8 @@ function Staff () {
         <div className={cx('wrapper')}>
             <div className={cx('mb-8')}><AdminContentHeader title="Quản lý danh mục" titleBtn="Thêm mới" onClick={() => console.log('Click button')} /></div>
             <DataTable columns={staffColumns} data={staffData} />
+            <div className={cx('mb-8')}><AdminContentHeader title="Quản lý nhân sự" titleBtn="Thêm mới" onClick={() => console.log('Click button')} /></div>
+            <DataTable columns={staffColumns} data={staffData} />
         </div>
     );
 }
