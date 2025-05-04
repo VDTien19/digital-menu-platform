@@ -28,19 +28,19 @@ export const searchByPath = async (pathname, searchValue, setters) => {
             path: '/admin/table',
             endpoint: 'tables',
             setter: setters.setTables,
-            queryParam: 'name_like',
+            queryParam: 'name',
         },
         {
             path: '/admin/staff',
             endpoint: 'staff',
             setter: setters.setStaff,
-            queryParam: 'name_like',
+            queryParam: 'name',
         },
         {
             path: '/admin/invoice',
             endpoint: 'invoices',
             setter: setters.setInvoices,
-            queryParam: 'id_like',
+            queryParam: 'id',
         },
     ];
 
