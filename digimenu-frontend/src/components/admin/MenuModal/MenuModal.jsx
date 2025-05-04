@@ -22,14 +22,14 @@ function MenuModal({ isOpen, onClose, data, onSave, categories }) {
     const [price, setPrice] = useState(data?.price || '');
     const [imageFile, setImageFile] = useState(data?.image || ''); // hình ảnh được push lên server
     const [imageUrl, setImageUrl] = useState(data?.image || ''); // lấy url tạm thời render hình ảnh
-    const [description, setDescription] = useState(data?.desc || '');
+    const [description, setDescription] = useState(data?.description || '');
     const [selectedCategory, setSelectedCategory] = useState(data?.category_id || '');
 
     useEffect(() => {
         if (data) {
             setName(data.name);
             setImageUrl(data.image);
-            setDescription(data.desc);
+            setDescription(data.description);
             setPrice(parseCurrency(data.price));
             setSelectedCategory(data.category_id);
         } else {
