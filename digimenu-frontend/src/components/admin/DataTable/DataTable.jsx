@@ -41,6 +41,7 @@ function DataTable({ columns, data }) {
                             >
                                 {/* Nếu column có hàm render thì gọi để custom content, không thì lấy dữ liệu trực tiếp theo key */}
                                 {col.render ? col.render(row[col.key], row) : row[col.key]}
+                                {/* {col.render ? col.render(row) : row[col.key]} */}
                             </div>
                         ))}
                     </div>
