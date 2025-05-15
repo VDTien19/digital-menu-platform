@@ -13,6 +13,7 @@ const routes = {
 
     // Admin routes
     admin_dashboard: '/:slug/admin',
+    admin_analyst: '/:slug/admin/analyst',
     admin_category: '/:slug/admin/category',
     admin_introduce: '/:slug/admin/introduce',
     admin_menu: '/:slug/admin/menu',
@@ -20,6 +21,7 @@ const routes = {
     admin_table: '/:slug/admin/table',
     admin_login: '/:slug/admin/login',
     admin_settings: '/:slug/admin/settings',
+    admin_payment_method: '/:slug/admin/payment-method',
 
     // Service routes
     service_home: '/:slug/service',

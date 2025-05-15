@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faInfo, faChartBar, faUtensils, faTableList, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faInfo, faChartBar, faUtensils, faTableList, faPeopleGroup, faChartSimple, faCreditCardAlt } from '@fortawesome/free-solid-svg-icons'
 
 import config from '~/config';
 import styles from './Sidebar.module.scss';
@@ -19,6 +19,11 @@ const MENU_ITEMS = [
         //     active: <HomeActiveIcon />,
         //     default: <HomeIcon />,
         // },
+    },
+    {
+        title: 'Phân tích',
+        to: config.routes.admin_analyst,
+        icon: <FontAwesomeIcon icon={faChartSimple} />
     },
     {
         title: 'Giới thiệu',
@@ -45,6 +50,11 @@ const MENU_ITEMS = [
         to: config.routes.admin_staff,
         icon: <FontAwesomeIcon icon={faPeopleGroup} />
     }, 
+    {
+        title: 'Quản lý thanh toán',
+        to: config.routes.admin_payment_method,
+        icon: <FontAwesomeIcon icon={faCreditCardAlt} />
+    },
     // {
     //     title: 'Quản lý hoá đơn',
     //     to: config.routes.admin_invoice,

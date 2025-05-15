@@ -1,7 +1,7 @@
 import config from '~/config';
 
 // page
-import { Category, Dashboard, Introduce, Menu as AdminMenu, Staff, Table, Setting } from '~/pages/admin';
+import { Category, Dashboard, Introduce, Menu as AdminMenu, Staff, Table, Setting, Analyst, PaymentMethod } from '~/pages/admin';
 import { Cart, Home as ClientHome, Invoice, Menu as ClientMenu, Message, Payment as ClientPayment } from '~/pages/client';
 import { Home as ServiceHome, Orders, Payment as ServicePayment } from '~/pages/service';
 import Home from '~/pages/Home';
@@ -29,12 +29,14 @@ const publicRoutes = [
 const privateRoutes = [
     // Admin routes
     { path: config.routes.admin_dashboard, component: Dashboard, layout: 'admin' },
+    { path: config.routes.admin_analyst, component: Analyst, layout: 'admin' },
     { path: config.routes.admin_category, component: Category, layout: 'admin' },
     { path: config.routes.admin_introduce, component: Introduce, layout: 'admin' },
     { path: config.routes.admin_menu, component: AdminMenu, layout: 'admin' },
     { path: config.routes.admin_staff, component: Staff, layout: 'admin' },
     { path: config.routes.admin_table, component: Table, layout: 'admin' },
     { path: config.routes.admin_settings, component: Setting, layout: 'admin' },
+    { path: config.routes.admin_payment_method, component: PaymentMethod, layout: 'admin' },
 
     // Service routes
     { path: config.routes.service_home, component: ServiceHome, layout: 'staff' },

@@ -6,3 +6,5 @@ export { default as Menu } from './Menu';
 export { default as Staff } from './Staff';
 export { default as Table } from './Table';
 export { default as Setting } from './Setting';
+export { default as Analyst } from './Analyst';
+export { default as PaymentMethod } from './PaymentMethod';
