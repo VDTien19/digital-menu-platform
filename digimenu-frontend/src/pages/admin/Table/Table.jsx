@@ -54,7 +54,8 @@ function Table() {
         };
     
         try {
-            await dispatch(updateTable({ id: tableData.id, data: updatedTable })).unwrap();
+            const updated = await dispatch(updateTable({ id: tableData.id, data: updatedTable })).unwrap();
+            setTableData(updated);
             // console.log('QR updated for table', tableData.id, updatedTable);
             // tableRef.current.toUrl = `http://localhost:5173/nha-hang-abc?tableName=${encode}`;
             // tableRef.current.updateQRCode();
