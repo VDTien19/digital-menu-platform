@@ -51,7 +51,7 @@ function TableModal({ data, isOpen, onClose, onChangeQR }) {
                             to={data?.table_url}
                             target='_blank'
                         >
-                            {data?.table_url.replace('http://172.20.10.3:5173', '')}
+                            {data?.table_url.replace('http://172.20.10.2:5173', '')}
                         </Link>{' '}
                     </div>
                     <TableQRCode
@@ -87,7 +87,7 @@ function TableModal({ data, isOpen, onClose, onChangeQR }) {
                         <DownloadIcon className={cx('text-2xl', 'mr-4')} />
                         <span>Tải xuống</span>
                     </button>
-                    <div
+                    {/* <div
                         className={cx(
                             'btn-wrapper',
                             'flex',
@@ -121,7 +121,7 @@ function TableModal({ data, isOpen, onClose, onChangeQR }) {
                         >
                             Hủy
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </Modal>
