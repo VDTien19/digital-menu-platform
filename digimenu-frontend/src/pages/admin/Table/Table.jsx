@@ -50,7 +50,7 @@ function Table() {
     
         const updatedTable = {
             encode,
-            table_url: `http://172.20.10.3:5173/${slug}?tableName=${tableName}&encode=${encode}`,
+            table_url: `http://172.20.10.2:5173/${slug}?tableName=${tableName}&encode=${encode}`,
         };
     
         try {
