@@ -13,47 +13,48 @@ import * as httpRequest from '~/utils/httpRequest';
 export const searchByPath = async (pathname, searchValue, setters) => {
     const searchMap = [
         {
-            path: '/admin/category',
+            path: 'category',
             endpoint: 'menu_categories',
             setter: setters.setCategories,
             queryParam: 'name',
         },
         {
-            path: '/admin/menu',
+            path: 'menu',
             endpoint: 'menu_items',
             setter: setters.setDishes,
             queryParam: 'name',
         },
         {
-            path: '/admin/table',
+            path: 'table',
             endpoint: 'tables',
             setter: setters.setTables,
             queryParam: 'name',
         },
         {
-            path: '/admin/staff',
+            path: 'staff',
             endpoint: 'staff',
             setter: setters.setStaff,
             queryParam: 'name',
         },
         {
-            path: '/admin/invoice',
+            path: 'invoice',
             endpoint: 'invoices',
             setter: setters.setInvoices,
             queryParam: 'id',
         },
     ];
 
-    // const normalized = normalizeText(searchValue);
-    // const encodedKeyword = encodeURIComponent(normalized);
-
     const encodedKeyword = encodeURIComponent(searchValue);
 
+    const segments = pathname.split('/').filter(Boolean); // ['admin', 'menu']
+    const lastSegment = segments[segments.length - 1];     // 'menu'
+
     for (const item of searchMap) {
-        if (pathname.includes(item.path)) {
+        if (lastSegment === item.path) {
             const res = await httpRequest.get(`${item.endpoint}?${item.queryParam}=${encodedKeyword}`);
             item.setter(res);
             break;
         }
     }
 };
+
