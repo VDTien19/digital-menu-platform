@@ -85,7 +85,7 @@ function MenuModal({ isOpen, onClose, data, onSave, categories }) {
                     <Image
                         src={imageUrl}
                         alt={name || 'image'}
-                        className={cx('rounded-2xl', 'w-full', 'object-cover')}
+                        className={cx('rounded-2xl', 'w-92', 'object-cover')}
                     />
                     <div
                         className={cx(
@@ -192,6 +192,7 @@ function MenuModal({ isOpen, onClose, data, onSave, categories }) {
                                     borderRadius: 0,
                                     minHeight: 'unset',
                                     height: '36px',
+                                    minWidth: '180px',
                                     '&:hover': {
                                         borderBottom: '2px solid #c19c58',
                                     },

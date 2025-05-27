@@ -68,7 +68,7 @@ function CreateTableModal ({ isOpen, onClose }) {
                                 name: tableName,
                                 status: 'empty',
                                 encode: encode,
-                                table_url: `http://172.20.10.3:5173/${slug}?tableName=${tableName}&encode=${encode}`,
+                                table_url: `http://172.20.10.2:5173/${slug}?tableName=${tableName}&encode=${encode}`,
                             };
                             dispatch(addTable(newTable));
                             setTableName(tables.listTables.length + 1);
