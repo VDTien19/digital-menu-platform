@@ -25,7 +25,10 @@ const routes = {
 
     // Service routes
     service_home: '/:slug/service',
-    service_view_order: '/:slug/service/order/:tableName',
+    service_category: '/:slug/service/category',
+    service_menu: '/:slug/service/menu',
+    service_table: '/:slug/service/table',
+    service_order: '/:slug/service/order',
     service_payment: '/:slug/service/payment/:tableName',
     service_login: '/:slug/service/login',
 };

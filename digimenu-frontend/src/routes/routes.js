@@ -40,8 +40,11 @@ const privateRoutes = [
 
     // Service routes
     { path: config.routes.service_home, component: ServiceHome, layout: 'staff' },
-    { path: config.routes.service_view_order, component: Orders, layout: 'staff' },
+    { path: config.routes.service_order, component: Orders, layout: 'staff' },
     { path: config.routes.service_payment, component: ServicePayment, layout: 'staff' },
+    { path: config.routes.service_table, component: Table, layout: 'staff' },
+    { path: config.routes.service_menu, component: AdminMenu, layout: 'staff' },
+    { path: config.routes.service_category, component: Category, layout: 'staff' },
 ];
 
 export { publicRoutes, privateRoutes }
