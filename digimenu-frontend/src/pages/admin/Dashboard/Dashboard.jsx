@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Dashboard.module.scss';
+import * as httpRequests from '~/utils/httpRequest';
 import DashboardStatic from '~/components/admin/DashboardStatic';
 import RevenueComparisonChart from '~/components/admin/RevenueComparisonChart';
 import RevenueChart from '~/components/admin/RevenueChart';
@@ -18,11 +19,15 @@ function Dashboard() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        fetch('http://172.20.10.3:8080/revenueComparison')
-            .then((res) => res.json())
-            .then((json) => {
-                setData(json);
-            });
+        const fetchData = async () => {
+            try {
+                const response = await httpRequests.get('/revenueComparison');
+                setData(response);
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        }
+        fetchData();
     }, []);
 
     return (
