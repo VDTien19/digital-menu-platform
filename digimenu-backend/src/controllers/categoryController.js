@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
+import MenuItem from '../models/MenuItem.js'; // Thêm import MenuItem
 
 /**
  * @swagger
@@ -43,7 +44,7 @@ import Category from '../models/Category.js';
  *                       type: string
  *                     description:
  *                       type: string
- *                     restaurantId:
+ *                     restaurant_id:
  *                       type: string
  *       400:
  *         description: Bad request
@@ -52,19 +53,19 @@ import Category from '../models/Category.js';
  */
 const createCategory = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
-  const restaurantId = req.user.restaurantId;
+  const restaurant_id = req.user.restaurant_id;
 
   if (!name) {
     res.status(400);
     throw new Error('Name is required');
   }
 
-  if (!restaurantId) {
+  if (!restaurant_id) {
     res.status(400);
     throw new Error('Restaurant ID not found for this user');
   }
 
-  const categoryExists = await Category.findOne({ name, restaurantId });
+  const categoryExists = await Category.findOne({ name, restaurant_id });
   if (categoryExists) {
     res.status(400);
     throw new Error('Category already exists for this restaurant');
@@ -73,7 +74,7 @@ const createCategory = asyncHandler(async (req, res) => {
   const category = await Category.create({
     name,
     description,
-    restaurantId,
+    restaurant_id,
   });
 
   res.status(201).json({
@@ -111,7 +112,7 @@ const createCategory = asyncHandler(async (req, res) => {
  *                         type: string
  *                       description:
  *                         type: string
- *                       restaurantId:
+ *                       restaurant_id:
  *                         type: object
  *                         properties:
  *                           _id:
@@ -120,7 +121,7 @@ const createCategory = asyncHandler(async (req, res) => {
  *                             type: string
  */
 const getCategories = asyncHandler(async (req, res) => {
-  const categories = await Category.find({}).populate('restaurantId', 'name');
+  const categories = await Category.find({}).populate('restaurant_id', 'name');
   res.status(200).json({
     success: true,
     count: categories.length,
@@ -160,7 +161,7 @@ const getCategories = asyncHandler(async (req, res) => {
  *                       type: string
  *                     description:
  *                       type: string
- *                     restaurantId:
+ *                     restaurant_id:
  *                       type: object
  *                       properties:
  *                         _id:
@@ -172,7 +173,7 @@ const getCategories = asyncHandler(async (req, res) => {
  */
 const getCategoryById = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id).populate(
-    'restaurantId',
+    'restaurant_id',
     'name'
   );
 
@@ -232,7 +233,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
  *                       type: string
  *                     description:
  *                       type: string
- *                     restaurantId:
+ *                     restaurant_id:
  *                       type: string
  *       404:
  *         description: Category not found
@@ -241,7 +242,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
  */
 const updateCategory = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
-  const restaurantId = req.user.restaurantId;
+  const restaurant_id = req.user.restaurant_id;
 
   const category = await Category.findById(req.params.id);
 
@@ -250,7 +251,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     throw new Error('Category not found');
   }
 
-  if (category.restaurantId.toString() !== restaurantId.toString()) {
+  if (category.restaurant_id.toString() !== restaurant_id.toString()) {
     res.status(403);
     throw new Error('Not authorized to update this category');
   }
@@ -299,7 +300,7 @@ const updateCategory = asyncHandler(async (req, res) => {
  *         description: Not authorized
  */
 const deleteCategory = asyncHandler(async (req, res) => {
-  const restaurantId = req.user.restaurantId;
+  const restaurant_id = req.user.restaurant_id;
 
   const category = await Category.findById(req.params.id);
 
@@ -308,10 +309,16 @@ const deleteCategory = asyncHandler(async (req, res) => {
     throw new Error('Category not found');
   }
 
-  if (category.restaurantId.toString() !== restaurantId.toString()) {
+  if (category.restaurant_id.toString() !== restaurant_id.toString()) {
     res.status(403);
     throw new Error('Not authorized to delete this category');
   }
+
+  // Cập nhật tất cả menuItem thuộc category này thành category_id: null
+  await MenuItem.updateMany(
+    { category_id: category._id },
+    { $set: { category_id: null } }
+  );
 
   await category.deleteOne();
 

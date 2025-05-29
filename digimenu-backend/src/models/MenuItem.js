@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
-import slugify from 'slugify';
 
 const menuItemSchema = new mongoose.Schema(
   {
-    restaurantId: {
+    restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: [true, 'Restaurant is required'],
@@ -12,9 +11,6 @@ const menuItemSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Menu item name is required'],
       trim: true,
-    },
-    slug: {
-      type: String,
     },
     price: {
       type: Number,
@@ -26,17 +22,17 @@ const menuItemSchema = new mongoose.Schema(
       trim: true,
       default: null,
     },
-    imageUrl: {
+    image_url: {
       type: String,
       trim: true,
       default: null,
     },
-    categoryId: {
+    category_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
-      required: [true, 'Category is required'],
+      default: null, // Cho phép null (chưa phân loại)
     },
-    orderCount: {
+    order_count: {
       type: Number,
       default: 0,
       min: [0, 'Order count cannot be negative'],
@@ -45,15 +41,7 @@ const menuItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Tạo slug trước khi lưu
-menuItemSchema.pre('save', async function (next) {
-  if (this.isModified('name')) {
-    this.slug = slugify(this.name, { lower: true, strict: true });
-  }
-  next();
-});
-
-// Đảm bảo slug unique trong phạm vi restaurantId
-menuItemSchema.index({ restaurantId: 1, slug: 1 }, { unique: true });
+// Đảm bảo name unique trong phạm vi restaurant_id
+menuItemSchema.index({ restaurant_id: 1, name: 1 }, { unique: true });
 
 export default mongoose.model('MenuItem', menuItemSchema);

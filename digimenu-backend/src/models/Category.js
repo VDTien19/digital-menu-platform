@@ -12,7 +12,7 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    restaurantId: {
+    restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: [true, 'Restaurant ID is required'],

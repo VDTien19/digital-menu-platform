@@ -2,19 +2,19 @@ import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema(
   {
-    restaurantId: {
+    restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: [true, 'Restaurant is required'],
     },
-    tableId: {
+    table_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Table',
       required: [true, 'Table is required'],
     },
     items: [
       {
-        itemId: {
+        item_id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'MenuItem',
           required: [true, 'Menu item is required'],
@@ -42,21 +42,21 @@ const orderSchema = new mongoose.Schema(
       ],
       default: 'Chờ xác nhận',
     },
-    totalCost: {
+    total_cost: {
       type: Number,
       required: [true, 'Total cost is required'],
       min: [0, 'Total cost must be a positive number'],
     },
-    paymentMethod: {
+    payment_method: {
       type: String,
       enum: ['QR', 'Tiền mặt', null],
       default: null,
     },
-    paymentConfirmed: {
+    payment_confirmed: {
       type: Boolean,
       default: false,
     },
-    phoneNumber: {
+    phone_number: {
       type: String,
       trim: true,
       default: null,
@@ -71,6 +71,6 @@ const orderSchema = new mongoose.Schema(
 );
 
 // Index cho truy vấn nhanh
-orderSchema.index({ restaurantId: 1 });
+orderSchema.index({ restaurant_id: 1 });
 
 export default mongoose.model('Order', orderSchema);

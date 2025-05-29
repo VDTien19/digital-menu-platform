@@ -11,12 +11,11 @@ const restaurantSchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true,
-      unique: true,
       index: true,
     },
-    ownerId: {
+    owner_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Đổi từ 'Admin' thành 'User'
+      ref: 'User',
       required: [true, 'Owner is required'],
     },
     address: {
@@ -29,12 +28,17 @@ const restaurantSchema = new mongoose.Schema(
       required: [true, 'Phone number is required'],
       trim: true,
     },
-    bannerUrl: {
+    banner_url: {
       type: String,
       trim: true,
       default: null,
     },
     introduction: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    thumbnail: {
       type: String,
       trim: true,
       default: null,
