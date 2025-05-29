@@ -29,8 +29,9 @@ import fs from 'fs';
  *               image:
  *                 type: string
  *                 format: binary
- *               categoryId:
+ *               category_id:
  *                 type: string
+ *                 description: Optional, leave empty for unclassified
  *     responses:
  *       201:
  *         description: Menu item created
@@ -40,37 +41,43 @@ import fs from 'fs';
  *         description: Admin access required
  */
 const addMenuItem = asyncHandler(async (req, res) => {
-  const { name, price, description, categoryId } = req.body;
+  const { name, price, description, category_id } = req.body;
 
   // Validate required fields
-  if (!name || !price || !categoryId) {
+  if (!name || !price) {
     res.status(400);
-    throw new Error('Name, price, and categoryId are required');
+    throw new Error('Name and price are required');
   }
 
-  // Check if category exists and belongs to the same restaurant
-  const category = await Category.findById(categoryId);
-  if (!category) {
-    res.status(404);
-    throw new Error('Category not found');
+  // Check if restaurant_id exists in req.user
+  if (!req.user || !req.user.restaurant_id) {
+    res.status(400);
+    throw new Error('Restaurant ID not found in user session');
   }
-  if (category.restaurantId.toString() !== req.user.restaurantId.toString()) {
-    res.status(403);
-    throw new Error('Category does not belong to your restaurant');
+
+  // Validate category_id if provided
+  if (category_id) {
+    const category = await Category.findById(category_id);
+    if (!category) {
+      res.status(404);
+      throw new Error('Category not found');
+    }
+    if (category.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
+      res.status(403);
+      throw new Error('Category does not belong to your restaurant');
+    }
   }
 
   // Handle image upload to Cloudinary
-  let imageUrl = null;
+  let image_url = null;
   if (req.file) {
     try {
-      const publicId = `menu-item-${req.user.restaurantId}-${Date.now()}`;
+      const publicId = `menu-item-${req.user.restaurant_id}-${Date.now()}`;
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: 'menu-items',
         public_id: publicId,
-        // Optimize: auto format and quality
         fetch_format: 'auto',
         quality: 'auto',
-        // Transform: auto-crop with gravity, no fixed width/height
         crop: 'auto',
         gravity: 'auto',
       });
@@ -79,14 +86,12 @@ const addMenuItem = asyncHandler(async (req, res) => {
         throw new Error('Failed to upload image to Cloudinary');
       }
 
-      imageUrl = result.secure_url;
+      image_url = result.secure_url;
 
-      // Delete the local file after uploading to Cloudinary
       if (fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
     } catch (error) {
-      // Delete the local file if upload fails
       if (req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
@@ -97,18 +102,18 @@ const addMenuItem = asyncHandler(async (req, res) => {
 
   // Create new menu item
   const menuItem = await MenuItem.create({
-    restaurantId: req.user.restaurantId,
+    restaurant_id: req.user.restaurant_id,
     name,
     price,
     description,
-    imageUrl,
-    categoryId,
+    image_url,
+    category_id: category_id || null,
   });
 
   // Populate category and restaurant for response
   const populatedMenuItem = await MenuItem.findById(menuItem._id)
-    .populate('categoryId', 'name')
-    .populate('restaurantId', 'name');
+    .populate('category_id', 'name')
+    .populate('restaurant_id', 'name');
 
   res.status(201).json({
     success: true,
@@ -128,8 +133,8 @@ const addMenuItem = asyncHandler(async (req, res) => {
  */
 const getMenuItems = asyncHandler(async (req, res) => {
   const menuItems = await MenuItem.find()
-    .populate('categoryId', 'name')
-    .populate('restaurantId', 'name');
+    .populate('category_id', 'name')
+    .populate('restaurant_id', 'name');
 
   res.status(200).json({
     success: true,
@@ -158,8 +163,8 @@ const getMenuItems = asyncHandler(async (req, res) => {
  */
 const getMenuItemById = asyncHandler(async (req, res) => {
   const menuItem = await MenuItem.findById(req.params.id)
-    .populate('categoryId', 'name')
-    .populate('restaurantId', 'name');
+    .populate('category_id', 'name')
+    .populate('restaurant_id', 'name');
 
   if (!menuItem) {
     res.status(404);
@@ -169,6 +174,71 @@ const getMenuItemById = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     data: menuItem,
+  });
+});
+
+/**
+ * @swagger
+ * /menu-items/category/{category_id}:
+ *   get:
+ *     summary: Get menu items by category (Public)
+ *     tags: [MenuItems]
+ *     parameters:
+ *       - in: path
+ *         name: category_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The category ID (use "null" to get unclassified items)
+ *     responses:
+ *       200:
+ *         description: List of menu items in the category
+ *       404:
+ *         description: Category not found
+ *       400:
+ *         description: Invalid category ID
+ */
+const getMenuItemsByCategory = asyncHandler(async (req, res) => {
+  const { category_id } = req.params;
+
+  // Validate category_id format
+  if (!category_id) {
+    res.status(400);
+    throw new Error('Category ID is required');
+  }
+
+  let queryCondition;
+
+  // Handle case where category_id is "null" (unclassified items)
+  if (category_id.toLowerCase() === 'null') {
+    queryCondition = { category_id: null };
+  } else {
+    // Validate if category_id is a valid ObjectId
+    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(category_id);
+    if (!isValidObjectId) {
+      res.status(400);
+      throw new Error('Invalid category ID format');
+    }
+
+    // Check if category exists
+    const category = await Category.findById(category_id);
+    if (!category) {
+      res.status(404);
+      throw new Error('Category not found');
+    }
+
+    queryCondition = { category_id };
+  }
+
+  // Find menu items by category_id (or null)
+  const menuItems = await MenuItem.find(queryCondition)
+    .populate('category_id', 'name')
+    .populate('restaurant_id', 'name');
+
+  res.status(200).json({
+    success: true,
+    count: menuItems.length,
+    data: menuItems,
   });
 });
 
@@ -202,8 +272,9 @@ const getMenuItemById = asyncHandler(async (req, res) => {
  *               image:
  *                 type: string
  *                 format: binary
- *               categoryId:
+ *               category_id:
  *                 type: string
+ *                 description: Optional, leave empty for unclassified
  *     responses:
  *       200:
  *         description: Menu item updated
@@ -213,7 +284,7 @@ const getMenuItemById = asyncHandler(async (req, res) => {
  *         description: Admin access required
  */
 const updateMenuItem = asyncHandler(async (req, res) => {
-  const { name, price, description, categoryId } = req.body;
+  const { name, price, description, category_id } = req.body;
 
   const menuItem = await MenuItem.findById(req.params.id);
   if (!menuItem) {
@@ -222,43 +293,43 @@ const updateMenuItem = asyncHandler(async (req, res) => {
   }
 
   // Check if menu item belongs to the user's restaurant
-  if (menuItem.restaurantId.toString() !== req.user.restaurantId.toString()) {
+  if (menuItem.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
     res.status(403);
     throw new Error('Menu item does not belong to your restaurant');
   }
 
-  // If categoryId is provided, validate it
-  if (categoryId) {
-    const category = await Category.findById(categoryId);
+  // Validate category_id if provided
+  if (category_id) {
+    const category = await Category.findById(category_id);
     if (!category) {
       res.status(404);
       throw new Error('Category not found');
     }
-    if (category.restaurantId.toString() !== req.user.restaurantId.toString()) {
+    if (category.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
       res.status(403);
       throw new Error('Category does not belong to your restaurant');
     }
-    menuItem.categoryId = categoryId;
+    menuItem.category_id = category_id;
+  } else if (category_id === '' || category_id === undefined) {
+    menuItem.category_id = null;
   }
 
   // Handle image upload to Cloudinary
   if (req.file) {
     try {
       // Delete old image from Cloudinary if exists
-      if (menuItem.imageUrl) {
-        const publicId = menuItem.imageUrl.split('/').pop().split('.')[0];
+      if (menuItem.image_url) {
+        const publicId = menuItem.image_url.split('/').pop().split('.')[0];
         await cloudinary.uploader.destroy(`menu-items/${publicId}`);
       }
 
       // Upload new image
-      const publicId = `menu-item-${req.user.restaurantId}-${Date.now()}`;
+      const publicId = `menu-item-${req.user.restaurant_id}-${Date.now()}`;
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: 'menu-items',
         public_id: publicId,
-        // Optimize: auto format and quality
         fetch_format: 'auto',
         quality: 'auto',
-        // Transform: auto-crop with gravity, no fixed width/height
         crop: 'auto',
         gravity: 'auto',
       });
@@ -267,14 +338,12 @@ const updateMenuItem = asyncHandler(async (req, res) => {
         throw new Error('Failed to upload image to Cloudinary');
       }
 
-      menuItem.imageUrl = result.secure_url;
+      menuItem.image_url = result.secure_url;
 
-      // Delete the local file after uploading to Cloudinary
       if (fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
     } catch (error) {
-      // Delete the local file if upload fails
       if (req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
@@ -292,8 +361,8 @@ const updateMenuItem = asyncHandler(async (req, res) => {
 
   // Populate category and restaurant for response
   const populatedMenuItem = await MenuItem.findById(menuItem._id)
-    .populate('categoryId', 'name')
-    .populate('restaurantId', 'name');
+    .populate('category_id', 'name')
+    .populate('restaurant_id', 'name');
 
   res.status(200).json({
     success: true,
@@ -331,14 +400,14 @@ const deleteMenuItem = asyncHandler(async (req, res) => {
   }
 
   // Check if menu item belongs to the user's restaurant
-  if (menuItem.restaurantId.toString() !== req.user.restaurantId.toString()) {
+  if (menuItem.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
     res.status(403);
     throw new Error('Menu item does not belong to your restaurant');
   }
 
   // Delete image from Cloudinary if exists
-  if (menuItem.imageUrl) {
-    const publicId = menuItem.imageUrl.split('/').pop().split('.')[0];
+  if (menuItem.image_url) {
+    const publicId = menuItem.image_url.split('/').pop().split('.')[0];
     await cloudinary.uploader.destroy(`menu-items/${publicId}`);
   }
 
@@ -354,6 +423,7 @@ export {
   addMenuItem,
   getMenuItems,
   getMenuItemById,
+  getMenuItemsByCategory,
   updateMenuItem,
   deleteMenuItem,
 };

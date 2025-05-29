@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Table from '../models/Table.js';
 import Restaurant from '../models/Restaurant.js';
 import generateQRCode from '../utils/qrCode.js';
+import cloudinary from '../config/cloudinary.js';
 
 /**
  * @swagger
@@ -34,14 +35,14 @@ const addTable = asyncHandler(async (req, res) => {
 
   // Create new table
   const table = await Table.create({
-    restaurantId: req.user.restaurantId,
+    restaurant_id: req.user.restaurant_id,
     status: status || 'Trống',
   });
 
   // Populate restaurant for response
   const populatedTable = await Table.findById(table._id)
-    .populate('restaurantId', 'name')
-    .populate('currentOrder', 'totalAmount status');
+    .populate('restaurant_id', 'name')
+    .populate('current_order', 'total_amount status');
 
   res.status(201).json({
     success: true,
@@ -61,8 +62,8 @@ const addTable = asyncHandler(async (req, res) => {
  */
 const getTables = asyncHandler(async (req, res) => {
   const tables = await Table.find()
-    .populate('restaurantId', 'name')
-    .populate('currentOrder', 'totalAmount status');
+    .populate('restaurant_id', 'name')
+    .populate('current_order', 'total_amount status');
 
   res.status(200).json({
     success: true,
@@ -91,8 +92,8 @@ const getTables = asyncHandler(async (req, res) => {
  */
 const getTableById = asyncHandler(async (req, res) => {
   const table = await Table.findById(req.params.id)
-    .populate('restaurantId', 'name')
-    .populate('currentOrder', 'totalAmount status');
+    .populate('restaurant_id', 'name')
+    .populate('current_order', 'total_amount status');
 
   if (!table) {
     res.status(404);
@@ -129,7 +130,7 @@ const getTableById = asyncHandler(async (req, res) => {
  *               status:
  *                 type: string
  *                 enum: ['Trống', 'Đang sử dụng']
- *               currentOrder:
+ *               current_order:
  *                 type: string
  *     responses:
  *       200:
@@ -140,7 +141,7 @@ const getTableById = asyncHandler(async (req, res) => {
  *         description: Admin access required
  */
 const updateTable = asyncHandler(async (req, res) => {
-  const { status, currentOrder } = req.body;
+  const { status, current_order } = req.body;
 
   const table = await Table.findById(req.params.id);
   if (!table) {
@@ -149,21 +150,21 @@ const updateTable = asyncHandler(async (req, res) => {
   }
 
   // Check if table belongs to the user's restaurant
-  if (table.restaurantId.toString() !== req.user.restaurantId.toString()) {
+  if (table.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
     res.status(403);
     throw new Error('Table does not belong to your restaurant');
   }
 
   // Update fields
   if (status) table.status = status;
-  if (currentOrder !== undefined) table.currentOrder = currentOrder || null;
+  if (current_order !== undefined) table.current_order = current_order || null;
 
   await table.save();
 
   // Populate restaurant for response
   const populatedTable = await Table.findById(table._id)
-    .populate('restaurantId', 'name')
-    .populate('currentOrder', 'totalAmount status');
+    .populate('restaurant_id', 'name')
+    .populate('current_order', 'total_amount status');
 
   res.status(200).json({
     success: true,
@@ -201,21 +202,21 @@ const deleteTable = asyncHandler(async (req, res) => {
   }
 
   // Check if table belongs to the user's restaurant
-  if (table.restaurantId.toString() !== req.user.restaurantId.toString()) {
+  if (table.restaurant_id.toString() !== req.user.restaurant_id.toString()) {
     res.status(403);
     throw new Error('Table does not belong to your restaurant');
   }
 
   // Check if table is in use
-  if (table.status === 'Đang sử dụng' || table.currentOrder) {
+  if (table.status === 'Đang sử dụng' || table.current_order) {
     res.status(400);
     throw new Error('Cannot delete a table that is in use');
   }
 
   // Delete QR image from Cloudinary if exists
-  if (table.qrImageUrl) {
+  if (table.qr_image_url) {
     try {
-      const publicId = table.qrImageUrl
+      const publicId = table.qr_image_url
         .split('/')
         .slice(-2)
         .join('/')
@@ -265,8 +266,8 @@ const scanTable = asyncHandler(async (req, res) => {
 
   const table = await Table.findOne({
     slug: tableSlug,
-    'restaurantId.slug': restaurantSlug,
-  }).populate('restaurantId', 'name');
+    'restaurant_id.slug': restaurantSlug,
+  }).populate('restaurant_id', 'name');
 
   if (!table) {
     res.status(404);
@@ -276,10 +277,10 @@ const scanTable = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      tableNumber: `Bàn ${table.tableNumber}`,
-      restaurantName: table.restaurantId.name,
+      table_number: `Bàn ${table.table_number}`,
+      restaurant_name: table.restaurant_id.name,
       status: table.status,
-      qrCode: table.qrCode,
+      qr_code: table.qr_code,
     },
   });
 });

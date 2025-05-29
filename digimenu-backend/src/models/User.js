@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt'; // Sửa lỗi chính tả: "brcypt" thành "bcrypt"
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
+      select: false, // Không trả về password khi query
     },
     role: {
       type: String,
@@ -24,22 +25,22 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Email is required'],
       trim: true,
     },
-    phoneNumber: {
+    phone_number: {
       type: String,
       required: [true, 'Phone number is required'],
       trim: true,
     },
-    restaurantId: {
+    restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
-      required: [true, 'Restaurant is required'],
+      default: null, // Thay required: true thành default: null để tránh lỗi validation khi tạo admin
     },
   },
   { timestamps: true }
 );
 
 // Index cho truy vấn nhanh
-userSchema.index({ restaurantId: 1 });
+userSchema.index({ restaurant_id: 1 });
 
 // Hash password trước khi lưu
 userSchema.pre('save', async function (next) {

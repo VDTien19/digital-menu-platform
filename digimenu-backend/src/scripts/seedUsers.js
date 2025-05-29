@@ -17,46 +17,41 @@ const seedData = async () => {
     await User.deleteMany({});
     await Restaurant.deleteMany({});
 
-    // Mã hóa password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin123', salt);
-
-    // Tạo admin trước (tạm thời không có restaurantId)
+    // Tạo admin trước (tạm thời không có restaurant_id)
     const adminData = {
       username: 'admin',
-      password: hashedPassword,
+      password: 'admin123',
       role: 'admin',
       email: 'admin@restaurant.com',
-      phoneNumber: '0909123456',
+      phone_number: '0909123456',
     };
 
-    // Tạm thời bỏ qua validation để tạo admin
     const admin = new User(adminData);
-    await admin.save({ validateBeforeSave: false });
+    await admin.save();
 
-    // Tạo nhà hàng và gán ownerId
+    // Tạo nhà hàng và gán owner_id
     const restaurant = new Restaurant({
       name: 'TKN Pizza',
-      ownerId: admin._id,
+      owner_id: admin._id,
       address: '123 Đường ABC, Thành Phố Hà Nội',
       phone: '0909123456',
+      banner_url: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/delicious-pizza-banner-design-template-678ba6314fa1113b55bde00ccfb38bcc_screen.jpg?ts=1665562063',
+      thumbnail: 'https://st4.depositphotos.com/3316741/22997/i/450/depositphotos_229976142-stock-photo-pizza-with-tomatoes-mozzarella-cheese.jpg',
     });
     await restaurant.save();
 
-    // Cập nhật restaurantId cho admin
-    admin.restaurantId = restaurant._id;
+    // Cập nhật restaurant_id cho admin
+    admin.restaurant_id = restaurant._id;
     await admin.save();
-
-    const hashedPassword2 = await bcrypt.hash('staff1', salt);
 
     // Tạo nhân viên
     const staff = new User({
       username: 'staff1',
-      password: hashedPassword2,
+      password: 'staff1',
       role: 'staff',
       email: 'staff@restaurant.com',
-      phoneNumber: '0909123457',
-      restaurantId: restaurant._id,
+      phone_number: '0909123457',
+      restaurant_id: restaurant._id,
     });
     await staff.save();
 

@@ -18,23 +18,23 @@ import MenuItem from '../models/MenuItem.js';
  *           schema:
  *             type: object
  *             properties:
- *               tableId:
+ *               table_id:
  *                 type: string
  *               items:
  *                 type: array
  *                 items:
  *                   type: object
  *                   properties:
- *                     itemId:
+ *                     item_id:
  *                       type: string
  *                     quantity:
  *                       type: number
  *                     price:
  *                       type: number
- *               paymentMethod:
+ *               payment_method:
  *                 type: string
  *                 enum: ['QR', 'Tiền mặt']
- *               phoneNumber:
+ *               phone_number:
  *                 type: string
  *               notes:
  *                 type: string
@@ -47,32 +47,32 @@ import MenuItem from '../models/MenuItem.js';
  *         description: Table or menu item not found
  */
 const addOrder = asyncHandler(async (req, res) => {
-  const { tableId, items, paymentMethod, phoneNumber, notes } = req.body;
+  const { table_id, items, payment_method, phone_number, notes } = req.body;
 
   // Validate required fields
-  if (!tableId || !items || items.length === 0) {
+  if (!table_id || !items || items.length === 0) {
     res.status(400);
     throw new Error('Table ID and items are required');
   }
 
   // Check table
-  const table = await Table.findById(tableId);
+  const table = await Table.findById(table_id);
   if (!table) {
     res.status(404);
     throw new Error('Table not found');
   }
-  if (table.restaurantId.toString() !== req.user?.restaurantId?.toString()) {
+  if (table.restaurant_id.toString() !== req.user?.restaurant_id?.toString()) {
     res.status(403);
     throw new Error('Table does not belong to your restaurant');
   }
 
-  // Validate items and calculate totalCost
-  let totalCost = 0;
+  // Validate items and calculate total_cost
+  let total_cost = 0;
   for (const item of items) {
-    const menuItem = await MenuItem.findById(item.itemId);
+    const menuItem = await MenuItem.findById(item.item_id);
     if (!menuItem) {
       res.status(404);
-      throw new Error(`Menu item ${item.itemId} not found`);
+      throw new Error(`Menu item ${item.item_id} not found`);
     }
     if (!item.quantity || item.quantity < 1) {
       res.status(400);
@@ -82,23 +82,23 @@ const addOrder = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Price must be a positive number');
     }
-    totalCost += item.quantity * item.price;
+    total_cost += item.quantity * item.price;
   }
 
   // Create new order
   const order = await Order.create({
-    restaurantId: req.user.restaurantId,
-    tableId,
+    restaurant_id: req.user.restaurant_id,
+    table_id,
     items,
-    totalCost,
-    paymentMethod: paymentMethod || null,
-    paymentConfirmed: paymentMethod ? true : false,
-    phoneNumber: phoneNumber || null,
+    total_cost,
+    payment_method: payment_method || null,
+    payment_confirmed: payment_method ? true : false,
+    phone_number: phone_number || null,
     notes: notes || '',
   });
 
   // Update table
-  table.currentOrder = order._id;
+  table.current_order = order._id;
   table.status = 'Đang sử dụng';
   await table.save();
 
@@ -121,9 +121,9 @@ const addOrder = asyncHandler(async (req, res) => {
  *         description: List of orders
  */
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ restaurantId: req.user.restaurantId })
-    .populate('tableId', 'name tableNumber')
-    .populate('items.itemId', 'name price');
+  const orders = await Order.find({ restaurant_id: req.user.restaurant_id })
+    .populate('table_id', 'name table_number')
+    .populate('items.item_id', 'name price');
 
   res.status(200).json({
     success: true,
@@ -155,10 +155,10 @@ const getOrders = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findOne({
     _id: req.params.id,
-    restaurantId: req.user.restaurantId,
+    restaurant_id: req.user.restaurant_id,
   })
-    .populate('tableId', 'name tableNumber')
-    .populate('items.itemId', 'name price');
+    .populate('table_id', 'name table_number')
+    .populate('items.item_id', 'name price');
 
   if (!order) {
     res.status(404);
@@ -195,10 +195,10 @@ const getOrderById = asyncHandler(async (req, res) => {
  *               status:
  *                 type: string
  *                 enum: ['Chờ xác nhận', 'Đã nhận đơn', 'Đang chế biến', 'Đang lên món', 'Đã thanh toán']
- *               paymentMethod:
+ *               payment_method:
  *                 type: string
  *                 enum: ['QR', 'Tiền mặt']
- *               paymentConfirmed:
+ *               payment_confirmed:
  *                 type: boolean
  *               notes:
  *                 type: string
@@ -209,11 +209,11 @@ const getOrderById = asyncHandler(async (req, res) => {
  *         description: Order not found
  */
 const updateOrder = asyncHandler(async (req, res) => {
-  const { status, paymentMethod, paymentConfirmed, notes } = req.body;
+  const { status, payment_method, payment_confirmed, notes } = req.body;
 
   const order = await Order.findOne({
     _id: req.params.id,
-    restaurantId: req.user.restaurantId,
+    restaurant_id: req.user.restaurant_id,
   });
   if (!order) {
     res.status(404);
@@ -222,17 +222,17 @@ const updateOrder = asyncHandler(async (req, res) => {
 
   // Update fields
   if (status) order.status = status;
-  if (paymentMethod) order.paymentMethod = paymentMethod;
-  if (paymentConfirmed !== undefined) order.paymentConfirmed = paymentConfirmed;
+  if (payment_method) order.payment_method = payment_method;
+  if (payment_confirmed !== undefined) order.payment_confirmed = payment_confirmed;
   if (notes !== undefined) order.notes = notes;
 
   await order.save();
 
   // Update table status if order is completed
   if (status === 'Đã thanh toán') {
-    const table = await Table.findById(order.tableId);
+    const table = await Table.findById(order.table_id);
     if (table) {
-      table.currentOrder = null;
+      table.current_order = null;
       table.status = 'Trống';
       await table.save();
     }
@@ -267,7 +267,7 @@ const updateOrder = asyncHandler(async (req, res) => {
 const deleteOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOneAndDelete({
     _id: req.params.id,
-    restaurantId: req.user.restaurantId,
+    restaurant_id: req.user.restaurant_id,
   });
 
   if (!order) {
@@ -276,9 +276,9 @@ const deleteOrder = asyncHandler(async (req, res) => {
   }
 
   // Update table
-  const table = await Table.findById(order.tableId);
+  const table = await Table.findById(order.table_id);
   if (table) {
-    table.currentOrder = null;
+    table.current_order = null;
     table.status = 'Trống';
     await table.save();
   }
