@@ -1,19 +1,15 @@
 import express from 'express';
 import {
   addOrder,
-  getOrders,
-  getOrderById,
-  updateOrder,
-  deleteOrder,
+  getPendingOrders,
+  approveOrder,
 } from '../controllers/orderController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, staffOrAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/add').post(protect, addOrder);
-router.route('/').get(protect, admin, getOrders);
-router.route('/:id').get(protect, admin, getOrderById);
-router.route('/update/:id').put(protect, admin, updateOrder);
-router.route('/delete/:id').delete(protect, admin, deleteOrder);
+router.route('/add').post(addOrder); // Public API
+router.route('/pending').get(protect, staffOrAdmin, getPendingOrders); // Staff or Admin only
+router.route('/:id/approve').put(protect, staffOrAdmin, approveOrder); // Staff or Admin only
 
 export default router;
