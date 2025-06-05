@@ -49,4 +49,14 @@ const admin = asyncHandler(async (req, res, next) => {
   }
 });
 
-export { protect, admin };
+// Middleware to check if user is staff or admin
+const staffOrAdmin = asyncHandler(async (req, res, next) => {
+  if (req.user && (req.user.role === 'staff' || req.user.role === 'admin')) {
+    next();
+  } else {
+    res.status(403);
+    throw new Error('Staff or Admin access required');
+  }
+});
+
+export { protect, admin, staffOrAdmin };

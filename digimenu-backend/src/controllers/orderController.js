@@ -2,15 +2,14 @@ import asyncHandler from 'express-async-handler';
 import Order from '../models/Order.js';
 import Table from '../models/Table.js';
 import MenuItem from '../models/MenuItem.js';
+import OrderGroup from '../models/OrderGroup.js';
 
 /**
  * @swagger
  * /orders/add:
  *   post:
- *     summary: Add a new order (Public or Admin)
+ *     summary: Add a new order (Public)
  *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -29,13 +28,6 @@ import MenuItem from '../models/MenuItem.js';
  *                       type: string
  *                     quantity:
  *                       type: number
- *                     price:
- *                       type: number
- *               payment_method:
- *                 type: string
- *                 enum: ['QR', 'Tiền mặt']
- *               phone_number:
- *                 type: string
  *               notes:
  *                 type: string
  *     responses:
@@ -47,7 +39,7 @@ import MenuItem from '../models/MenuItem.js';
  *         description: Table or menu item not found
  */
 const addOrder = asyncHandler(async (req, res) => {
-  const { table_id, items, payment_method, phone_number, notes } = req.body;
+  const { table_id, items, notes } = req.body;
 
   // Validate required fields
   if (!table_id || !items || items.length === 0) {
@@ -61,13 +53,10 @@ const addOrder = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Table not found');
   }
-  if (table.restaurant_id.toString() !== req.user?.restaurant_id?.toString()) {
-    res.status(403);
-    throw new Error('Table does not belong to your restaurant');
-  }
 
   // Validate items and calculate total_cost
   let total_cost = 0;
+  const updatedItems = [];
   for (const item of items) {
     const menuItem = await MenuItem.findById(item.item_id);
     if (!menuItem) {
@@ -78,29 +67,59 @@ const addOrder = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Quantity must be at least 1');
     }
-    if (!item.price || item.price < 0) {
+    // Lấy price từ MenuItem
+    const price = menuItem.price;
+    if (price < 0) {
       res.status(400);
-      throw new Error('Price must be a positive number');
+      throw new Error(`Price of menu item ${item.item_id} must be a positive number`);
     }
-    total_cost += item.quantity * item.price;
+    // Tính tổng tiền cho item này
+    const itemTotal = item.quantity * price;
+    total_cost += itemTotal;
+
+    // Thêm price vào item để lưu vào Order
+    updatedItems.push({
+      item_id: item.item_id,
+      quantity: item.quantity,
+      price: price,
+    });
+  }
+
+  // Check or create OrderGroup
+  let orderGroup = await OrderGroup.findById(table.current_order_group);
+  if (!orderGroup || orderGroup.payment_status === 'Đã thanh toán') {
+    orderGroup = await OrderGroup.create({
+      restaurant_id: table.restaurant_id,
+      table_id,
+      payment_status: 'Chưa thanh toán',
+    });
+    table.current_order_group = orderGroup._id;
+    table.status = 'Đang sử dụng';
+    await table.save();
   }
 
   // Create new order
   const order = await Order.create({
-    restaurant_id: req.user.restaurant_id,
+    restaurant_id: table.restaurant_id,
     table_id,
-    items,
+    order_group_id: orderGroup._id,
+    items: updatedItems,
     total_cost,
-    payment_method: payment_method || null,
-    payment_confirmed: payment_method ? true : false,
-    phone_number: phone_number || null,
     notes: notes || '',
+    status: 'Đang chờ', // Default status as per schema
   });
 
-  // Update table
-  table.current_order = order._id;
-  table.status = 'Đang sử dụng';
-  await table.save();
+  // Update OrderGroup
+  orderGroup.orders.push(order._id);
+  orderGroup.total_cost += total_cost;
+  await orderGroup.save();
+
+  // Emit WebSocket event
+  const io = req.app.get('io');
+  const populatedOrder = await Order.findById(order._id)
+    .populate('table_id', 'name')
+    .populate('items.item_id', 'name price');
+  io.emit('new_pending_order', populatedOrder);
 
   res.status(201).json({
     success: true,
@@ -110,20 +129,26 @@ const addOrder = asyncHandler(async (req, res) => {
 
 /**
  * @swagger
- * /orders:
+ * /orders/pending:
  *   get:
- *     summary: Get all orders for staff (Admin only)
+ *     summary: Get all pending orders for staff (Staff or Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of orders
+ *         description: List of pending orders
+ *       403:
+ *         description: Staff or Admin access required
  */
-const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ restaurant_id: req.user.restaurant_id })
+const getPendingOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({
+    restaurant_id: req.user.restaurant_id,
+    status: 'Đang chờ',
+  })
     .populate('table_id', 'name table_number')
-    .populate('items.item_id', 'name price');
+    .populate('items.item_id', 'name price')
+    .sort({ createdAt: -1 }); // Newest first
 
   res.status(200).json({
     success: true,
@@ -134,48 +159,9 @@ const getOrders = asyncHandler(async (req, res) => {
 
 /**
  * @swagger
- * /orders/{id}:
- *   get:
- *     summary: Get an order by ID (Admin only)
- *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Order details
- *       404:
- *         description: Order not found
- */
-const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findOne({
-    _id: req.params.id,
-    restaurant_id: req.user.restaurant_id,
-  })
-    .populate('table_id', 'name table_number')
-    .populate('items.item_id', 'name price');
-
-  if (!order) {
-    res.status(404);
-    throw new Error('Order not found');
-  }
-
-  res.status(200).json({
-    success: true,
-    data: order,
-  });
-});
-
-/**
- * @swagger
- * /orders/update/{id}:
+ * /orders/{id}/approve:
  *   put:
- *     summary: Update an order (Admin only)
+ *     summary: Approve an order (Staff or Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -185,58 +171,35 @@ const getOrderById = asyncHandler(async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 enum: ['Chờ xác nhận', 'Đã nhận đơn', 'Đang chế biến', 'Đang lên món', 'Đã thanh toán']
- *               payment_method:
- *                 type: string
- *                 enum: ['QR', 'Tiền mặt']
- *               payment_confirmed:
- *                 type: boolean
- *               notes:
- *                 type: string
  *     responses:
  *       200:
- *         description: Order updated
+ *         description: Order approved
  *       404:
  *         description: Order not found
+ *       403:
+ *         description: Staff or Admin access required
  */
-const updateOrder = asyncHandler(async (req, res) => {
-  const { status, payment_method, payment_confirmed, notes } = req.body;
-
+const approveOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOne({
     _id: req.params.id,
     restaurant_id: req.user.restaurant_id,
   });
+
   if (!order) {
     res.status(404);
     throw new Error('Order not found');
   }
 
-  // Update fields
-  if (status) order.status = status;
-  if (payment_method) order.payment_method = payment_method;
-  if (payment_confirmed !== undefined) order.payment_confirmed = payment_confirmed;
-  if (notes !== undefined) order.notes = notes;
-
+  // Update order status to "Đã nhận"
+  order.status = 'Đã nhận';
   await order.save();
 
-  // Update table status if order is completed
-  if (status === 'Đã thanh toán') {
-    const table = await Table.findById(order.table_id);
-    if (table) {
-      table.current_order = null;
-      table.status = 'Trống';
-      await table.save();
-    }
-  }
+  // Emit WebSocket event
+  const io = req.app.get('io');
+  const populatedOrder = await Order.findById(order._id)
+    .populate('table_id', 'name')
+    .populate('items.item_id', 'name price');
+  io.emit('order_updated', populatedOrder);
 
   res.status(200).json({
     success: true,
@@ -244,49 +207,4 @@ const updateOrder = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @swagger
- * /orders/delete/{id}:
- *   delete:
- *     summary: Delete an order (Admin only)
- *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Order deleted
- *       404:
- *         description: Order not found
- */
-const deleteOrder = asyncHandler(async (req, res) => {
-  const order = await Order.findOneAndDelete({
-    _id: req.params.id,
-    restaurant_id: req.user.restaurant_id,
-  });
-
-  if (!order) {
-    res.status(404);
-    throw new Error('Order not found');
-  }
-
-  // Update table
-  const table = await Table.findById(order.table_id);
-  if (table) {
-    table.current_order = null;
-    table.status = 'Trống';
-    await table.save();
-  }
-
-  res.status(200).json({
-    success: true,
-    message: 'Order deleted',
-  });
-});
-
-export { addOrder, getOrders, getOrderById, updateOrder, deleteOrder };
+export { addOrder, getPendingOrders, approveOrder };

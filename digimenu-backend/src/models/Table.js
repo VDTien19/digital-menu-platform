@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import validator from 'validator'; // Thêm thư viện validator để kiểm tra URL
+import validator from 'validator';
 
 const tableSchema = new mongoose.Schema(
   {
@@ -43,9 +43,9 @@ const tableSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    current_order: {
+    current_order_group: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Order',
+      ref: 'OrderGroup',
       default: null,
     },
   },
@@ -54,7 +54,6 @@ const tableSchema = new mongoose.Schema(
 
 // Middleware pre('save') để validate dữ liệu
 tableSchema.pre('save', async function (next) {
-  // Kiểm tra restaurant_id có tồn tại không
   const restaurant = await mongoose.model('Restaurant').findById(this.restaurant_id);
   if (!restaurant) {
     return next(new Error('Restaurant not found'));

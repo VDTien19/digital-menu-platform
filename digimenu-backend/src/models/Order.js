@@ -12,6 +12,11 @@ const orderSchema = new mongoose.Schema(
       ref: 'Table',
       required: [true, 'Table is required'],
     },
+    order_group_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'OrderGroup',
+      required: [true, 'Order group is required'],
+    },
     items: [
       {
         item_id: {
@@ -26,45 +31,25 @@ const orderSchema = new mongoose.Schema(
         },
         price: {
           type: Number,
-          required: [true, 'Price is required'],
           min: [0, 'Price must be a positive number'],
+          // Bỏ required vì giá sẽ được lấy từ MenuItem
         },
       },
     ],
-    status: {
-      type: String,
-      enum: [
-        'Chờ xác nhận',
-        'Đã nhận đơn',
-        'Đang chế biến',
-        'Đang lên món',
-        'Đã thanh toán',
-      ],
-      default: 'Chờ xác nhận',
-    },
     total_cost: {
       type: Number,
       required: [true, 'Total cost is required'],
       min: [0, 'Total cost must be a positive number'],
     },
-    payment_method: {
-      type: String,
-      enum: ['QR', 'Tiền mặt', null],
-      default: null,
-    },
-    payment_confirmed: {
-      type: Boolean,
-      default: false,
-    },
-    phone_number: {
-      type: String,
-      trim: true,
-      default: null,
-    },
     notes: {
       type: String,
       trim: true,
       default: '',
+    },
+    status: {
+      type: String,
+      enum: ['Đang chờ', 'Đã nhận'],
+      default: 'Đang chờ',
     },
   },
   { timestamps: true }
@@ -72,5 +57,7 @@ const orderSchema = new mongoose.Schema(
 
 // Index cho truy vấn nhanh
 orderSchema.index({ restaurant_id: 1 });
+orderSchema.index({ table_id: 1 });
+orderSchema.index({ order_group_id: 1 });
 
 export default mongoose.model('Order', orderSchema);
