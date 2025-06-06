@@ -5,6 +5,7 @@ import menuItemRoutes from './menuItemRoutes.js';
 import tableRoutes from './tableRoutes.js';
 import orderRoutes from './orderRoutes.js';
 import orderGroupRoutes from './orderGroupRoutes.js';
+import invoiceRoutes from './invoiceRoutes.js';
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use('/menu-items', menuItemRoutes);
 router.use('/tables', tableRoutes);
 router.use('/orders', orderRoutes);
 router.use('/order-groups', orderGroupRoutes);
+router.use('/invoices', invoiceRoutes);
 
 export default router;

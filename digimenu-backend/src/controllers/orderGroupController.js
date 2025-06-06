@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import OrderGroup from '../models/OrderGroup.js';
 import Table from '../models/Table.js';
+import { createInvoice } from './invoiceController.js';
 
 /**
  * @swagger
@@ -102,6 +103,9 @@ const updateOrderGroup = asyncHandler(async (req, res) => {
     throw new Error('Order group not found');
   }
 
+  // Lưu trạng thái cũ để kiểm tra
+  const oldPaymentStatus = orderGroup.payment_status;
+
   // Update payment status and method
   if (payment_method) {
     orderGroup.payment_method = payment_method;
@@ -117,6 +121,11 @@ const updateOrderGroup = asyncHandler(async (req, res) => {
     table.current_order_group = null;
     table.status = 'Trống';
     await table.save();
+  }
+
+  // Tạo Invoice nếu trạng thái mới là "Đã thanh toán" và trạng thái cũ không phải
+  if (orderGroup.payment_status === 'Đã thanh toán' && oldPaymentStatus !== 'Đã thanh toán') {
+    await createInvoice(req, orderGroup); // Truyền req vào createInvoice
   }
 
   // Emit WebSocket event
