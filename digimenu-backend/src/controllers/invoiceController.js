@@ -36,19 +36,6 @@ const createInvoice = asyncHandler(async (req, orderGroup) => {
 
   // Lưu vào database
   await invoice.save();
-
-  // Phát sự kiện WebSocket
-  const io = req.app.get('io');
-  const populatedInvoice = await Invoice.findById(invoice._id)
-    .populate('table_id', 'name table_number');
-  io.emit('invoice_created', {
-    _id: populatedInvoice._id,
-    invoice_number: populatedInvoice.invoice_number,
-    table_id: populatedInvoice.table_id,
-    total_cost: populatedInvoice.total_cost,
-    payment_date: populatedInvoice.payment_date,
-  });
-
   return invoice;
 });
 
