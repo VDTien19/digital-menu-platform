@@ -63,10 +63,13 @@ const addOrder = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Menu item ${item.item_id} not found`);
     }
-    if (!item.quantity || item.quantity < 1) {
-      res.status(400);
-      throw new Error('Quantity must be at least 1');
+
+    // Mặc định quantity là 1 nếu không được cung cấp hoặc không hợp lệ
+    let quantity = item.quantity;
+    if (!quantity || quantity < 1) {
+      quantity = 1;
     }
+
     // Lấy price từ MenuItem
     const price = menuItem.price;
     if (price < 0) {
@@ -74,13 +77,13 @@ const addOrder = asyncHandler(async (req, res) => {
       throw new Error(`Price of menu item ${item.item_id} must be a positive number`);
     }
     // Tính tổng tiền cho item này
-    const itemTotal = item.quantity * price;
+    const itemTotal = quantity * price;
     total_cost += itemTotal;
 
-    // Thêm price vào item để lưu vào Order
+    // Thêm price và quantity đã xử lý vào item để lưu vào Order
     updatedItems.push({
       item_id: item.item_id,
-      quantity: item.quantity,
+      quantity: quantity,
       price: price,
     });
   }
@@ -207,4 +210,33 @@ const approveOrder = asyncHandler(async (req, res) => {
   });
 });
 
-export { addOrder, getPendingOrders, approveOrder };
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     summary: Get all orders (pending and approved) for staff (Staff or Admin only)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all orders
+ *       403:
+ *         description: Staff or Admin access required
+ */
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({
+    restaurant_id: req.user.restaurant_id,
+  })
+    .populate('table_id', 'name table_number')
+    .populate('items.item_id', 'name price')
+    .sort({ createdAt: -1 }); // Newest first
+
+  res.status(200).json({
+    success: true,
+    count: orders.length,
+    data: orders,
+  });
+});
+
+export { addOrder, getPendingOrders, approveOrder, getAllOrders };
