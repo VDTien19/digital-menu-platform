@@ -40,7 +40,7 @@ function DataTable({ columns, data }) {
                                 className={cx('cus-table-cell', 'flex-1', col.cellClass)} // cellClass để style riêng cho từng ô
                             >
                                 {/* Nếu column có hàm render thì gọi để custom content, không thì lấy dữ liệu trực tiếp theo key */}
-                                {col.render ? col.render(row[col.key], row) : row[col.key]}
+                                {col.render ? col.render(row[col.key], row, rowIndex) : row[col.key]}
                                 {/* {col.render ? col.render(row) : row[col.key]} */}
                             </div>
                         ))}

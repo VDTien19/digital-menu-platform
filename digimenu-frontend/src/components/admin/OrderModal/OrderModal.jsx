@@ -1,182 +1,12 @@
 import {} from 'react';
 import classNames from 'classnames/bind';
 
-import styles from './Orders.module.scss';
-import AdminContentHeader from '~/components/admin/AdminContentHeader';
-import TableStatus from '~/components/admin/TableStatus';
-import OrderTable from '~/components/admin/OrderTable';
+import styles from './OrderModal.module.scss';
+import Modal from '~/components/Modal';
 
 const cx = classNames.bind(styles);
 
-const orders = [
-    {
-        _id: 'order-1',
-        table_number: 1,
-        dish_name: 'Spaghetti 5',
-        quantity: 1,
-        price: 50000,
-        image_url: 'https://source.unsplash.com/100x100/?spaghetti',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T13:59:32',
-    },
-    {
-        _id: 'order-2',
-        table_number: 1,
-        dish_name: 'Beef steak',
-        quantity: 1,
-        price: 190000,
-        image_url: 'https://source.unsplash.com/100x100/?steak',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T13:59:48',
-    },
-    {
-        _id: 'order-3',
-        table_number: 1,
-        dish_name: 'Bánh mì Việt Nam',
-        quantity: 1,
-        price: 100000,
-        image_url: 'https://source.unsplash.com/100x100/?banhmi',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T13:59:52',
-    },
-    {
-        _id: 'order-4',
-        table_number: 2,
-        dish_name: 'Spaghetti 5',
-        quantity: 1,
-        price: 50000,
-        image_url: 'https://source.unsplash.com/100x100/?spaghetti',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T11:20:26',
-    },
-    {
-        _id: 'order-5',
-        table_number: 2,
-        dish_name: 'Beef steak',
-        quantity: 1,
-        price: 190000,
-        image_url: 'https://source.unsplash.com/100x100/?steak',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T11:20:24',
-    },
-    {
-        _id: 'order-6',
-        table_number: 3,
-        dish_name: 'Spaghetti 5',
-        quantity: 2,
-        price: 100000,
-        image_url: 'https://source.unsplash.com/100x100/?spaghetti',
-        status: 'Đã nhận đơn',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T11:20:17',
-    },
-    {
-        _id: 'order-7',
-        table_number: 4,
-        dish_name: 'Bánh mì Việt Nam',
-        quantity: 2,
-        price: 200000,
-        image_url: 'https://source.unsplash.com/100x100/?banhmi',
-        status: 'Đã nhận đơn',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T11:20:17',
-    },
-    {
-        _id: 'order-8',
-        table_number: 5,
-        dish_name: 'Spaghetti 5',
-        quantity: 1,
-        price: 50000,
-        image_url: 'https://source.unsplash.com/100x100/?spaghetti',
-        status: 'Đã nhận đơn',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-26T11:19:29',
-    },
-    {
-        _id: 'order-9',
-        table_number: 6,
-        dish_name: 'Pizza phô mai',
-        quantity: 1,
-        price: 120000,
-        image_url: 'https://source.unsplash.com/100x100/?pizza',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 2',
-        updated_at: '2024-08-25T15:03:00',
-    },
-    {
-        _id: 'order-10',
-        table_number: 7,
-        dish_name: 'Cơm tấm sườn',
-        quantity: 1,
-        price: 45000,
-        image_url: 'https://source.unsplash.com/100x100/?comtam',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 3',
-        updated_at: '2024-08-25T14:45:10',
-    },
-    {
-        _id: 'order-11',
-        table_number: 8,
-        dish_name: 'Mì Quảng',
-        quantity: 2,
-        price: 80000,
-        image_url: 'https://source.unsplash.com/100x100/?miquang',
-        status: 'Đã nhận đơn',
-        handler: 'Được Hello 4',
-        updated_at: '2024-08-25T14:22:30',
-    },
-    {
-        _id: 'order-12',
-        table_number: 9,
-        dish_name: 'Phở bò',
-        quantity: 1,
-        price: 60000,
-        image_url: 'https://source.unsplash.com/100x100/?pho',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 2',
-        updated_at: '2024-08-25T14:12:30',
-    },
-    {
-        _id: 'order-13',
-        table_number: 10,
-        dish_name: 'Bánh cuốn',
-        quantity: 1,
-        price: 40000,
-        image_url: 'https://source.unsplash.com/100x100/?banhcuon',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 3',
-        updated_at: '2024-08-25T13:59:00',
-    },
-    {
-        _id: 'order-14',
-        table_number: 11,
-        dish_name: 'Cá hồi áp chảo',
-        quantity: 1,
-        price: 220000,
-        image_url: 'https://source.unsplash.com/100x100/?salmon',
-        status: 'Đã nhận đơn',
-        handler: 'Được Hello 4',
-        updated_at: '2024-08-25T13:00:00',
-    },
-    {
-        _id: 'order-15',
-        table_number: 12,
-        dish_name: 'Súp cua',
-        quantity: 2,
-        price: 70000,
-        image_url: 'https://source.unsplash.com/100x100/?soup',
-        status: 'Chờ xử lý',
-        handler: 'Được Hello 1',
-        updated_at: '2024-08-25T12:30:00',
-    },
-];
-
-const orderGroups = [
+const data = [
     {
         _id: '6842ffb41f58c74039474152',
         restaurant_id: '6835ddcf7830cad5b4319a13',
@@ -1402,25 +1232,27 @@ const orderGroups = [
     },
 ];
 
-function Orders() {
+function OrderModal({ isOpen, onClose, tableData }) {
+    if (!isOpen) return null;
+
     return (
-        <div className={cx('wrapper', 'p-4')}>
-            <div className={cx('mb-8')}>
-                <AdminContentHeader
-                    title="Quản lý hoá đơn"
-                    titleBtn="Thêm mới"
-                />
+        <Modal
+            onClose={onClose}
+            title={`Chi tiết đơn hàng bàn ${5}`}
+            isOpen={isOpen}
+            partition={true}
+        >
+            <div className={cx('order-modal', 'p-4')}>
+                <div className={cx('order-details')}>
+                    {/* Thông tin chi tiết đơn hàng sẽ được hiển thị ở đây */}
+                    <p className={cx('mb-2')}>Món ăn: Spaghetti 5</p>
+                    <p className={cx('mb-2')}>Số lượng: 1</p>
+                    <p className={cx('mb-2')}>Giá: 50,000 VNĐ</p>
+                    <p className={cx('mb-2')}>Trạng thái: Chờ xử lý</p>
+                </div>
             </div>
-            <div className="grid grid-cols-4 gap-4">
-                {orderGroups.map((group) => (
-                    <TableStatus key={group._id} orderGroup={group} />
-                ))}
-            </div>
-            <div>
-                <OrderTable orders={orders} />
-            </div>
-        </div>
+        </Modal>
     );
 }
 
-export default Orders;
+export default OrderModal;

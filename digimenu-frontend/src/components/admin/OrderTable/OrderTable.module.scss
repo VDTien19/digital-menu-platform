@@ -1,0 +1,16 @@
+.status-select {
+    @apply px-2 py-1 rounded border border-gray-300 text-sm;
+}
+
+.dish-name {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .dish-name {
+        max-width: 80px;
+    }
+}

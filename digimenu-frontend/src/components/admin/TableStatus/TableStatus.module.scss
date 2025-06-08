@@ -1,0 +1,15 @@
+.wrapper {
+    transition: all .3s ease;
+    &:hover {
+        
+    }
+}
+
+.separate {
+    position: absolute;
+    width: 2px;
+    height: 70%;
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
